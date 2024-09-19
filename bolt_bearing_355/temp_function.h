@@ -1,0 +1,8 @@
+#ifndef BOLT_BEARING_355_TEMP_FUNCTION_H
+#define BOLT_BEARING_355_TEMP_FUNCTION_H
+
+#include <curses.h>
+
+
+
+#endif //BOLT_BEARING_355_TEMP_FUNCTION_H
