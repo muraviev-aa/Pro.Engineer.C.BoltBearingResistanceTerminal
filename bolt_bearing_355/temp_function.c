@@ -12,6 +12,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a)
     char info_thick_first_part[3];
     char info_thick_second_part[3];
     char ch;
+    /* Пункты входных данных */
     wmove(sub1, 1, 7);
     waddstr(sub1, "Initial data");
     wmove(sub1, 2, 1);
@@ -36,9 +37,8 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a)
         wgetnstr(a, info_bolt_diam, 2);
         bolt_diam = atoi(info_bolt_diam);
         wmove(a, 1, 4);
-        wprintw(a,
-                "Bolt diameter is %d mm. If the information is correct then press 'y', if incorrect press 'n' ",
-                bolt_diam);
+        wprintw(a, "Bolt diameter is %d mm. If the information is correct then press 'y', "
+                   "if incorrect press 'n' ", bolt_diam);
         ch = (char) wgetch(a);
         if (ch == 'n')
             delete_char(a, 1, 1, 95);
@@ -58,15 +58,14 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a)
     do
     {
         wclear(a);
-        wbkgd(a, COLOR_PAIR(3));
+        wbkgd(a, COLOR_PAIR(4));
         wmove(a, 0, 2);
         waddstr(a, "2.Enter number of slices: ");
-        wgetnstr(a, info_number_slices, 2);
+        wgetnstr(a, info_number_slices, 1);
         number_slices = atoi(info_number_slices);
         wmove(a, 1, 4);
-        wprintw(a,
-                "Number of slices is %d mm. If the information is correct then press 'y', if incorrect press 'n' ",
-                bolt_diam);
+        wprintw(a, "Number of slices is %d mm. If the information is correct then press 'y', "
+                   "if incorrect press 'n' ", number_slices);
         ch = (char) wgetch(a);
         if (ch == 'n')
             delete_char(a, 1, 1, 95);
@@ -84,15 +83,14 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a)
         do
         {
             wclear(a);
-            wbkgd(a, COLOR_PAIR(4));
+            wbkgd(a, COLOR_PAIR(5));
             wmove(a, 0, 2);
             waddstr(a, "3.Enter the thickness of the first part (mm): ");
             wgetnstr(a, info_thick_first_part, 2);
             thick_first_part = atoi(info_thick_first_part);
             wmove(a, 1, 4);
-            wprintw(a,
-                    "Thickness of the first part is %d mm. If the information is correct then press 'y', if incorrect press 'n' ",
-                    thick_first_part);
+            wprintw(a, "Thickness of the first part is %d mm. If the information is correct then press 'y', "
+                       "if incorrect press 'n' ", thick_first_part);
             ch = (char) wgetch(a);
             if (ch == 'n')
                 delete_char(a, 1, 1, 95);
@@ -102,21 +100,22 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a)
         wprintw(sub1, "first part    is %d mm", thick_first_part);
         wmove(sub1, 5, 1);
         waddch(sub1, ACS_DIAMOND);
+        wmove(sub1, 5, 27);
+        waddch(sub1, ACS_RARROW); // стрелка вправо
         wrefresh(sub1);
 
         /* Ввод толщины второй сминаемой в одном направлении детали */
         do
         {
             wclear(a);
-            wbkgd(a, COLOR_PAIR(5));
+            wbkgd(a, COLOR_PAIR(6));
             wmove(a, 0, 2);
             waddstr(a, "4.Enter the thickness of the second part (mm): ");
             wgetnstr(a, info_thick_second_part, 2);
             thick_second_part = atoi(info_thick_second_part);
             wmove(a, 1, 4);
-            wprintw(a,
-                    "Thickness of the second part is %d mm. If the information is correct then press 'y', if incorrect press 'n' ",
-                    thick_second_part);
+            wprintw(a, "Thickness of the second part is %d mm. If the information is correct then press 'y', "
+                       "if incorrect press 'n' ", thick_second_part);
             ch = (char) wgetch(a);
             if (ch == 'n')
                 delete_char(a, 1, 1, 95);
@@ -126,6 +125,59 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a)
         wprintw(sub1, "second part   is %d mm", thick_second_part);
         wmove(sub1, 6, 1);
         waddch(sub1, ACS_DIAMOND);
+        wmove(sub1, 6, 27);
+        waddch(sub1, ACS_LARROW); // стрелка влево
+        wrefresh(sub1);
+    } else
+    {
+        /* Ввод суммы первых сминаемых в одном направлении деталей */
+        do
+        {
+            wclear(a);
+            wbkgd(a, COLOR_PAIR(5));
+            wmove(a, 0, 2);
+            waddstr(a, "3.Enter the total thickness of parts bearing in one direction (mm): ");
+            wgetnstr(a, info_thick_first_part, 2);
+            thick_first_part = atoi(info_thick_first_part);
+            wmove(a, 1, 4);
+            wprintw(a, "Total thickness of parts bearing is %d mm. If the information "
+                       "is correct then press 'y', if incorrect press 'n' ", thick_first_part);
+            ch = (char) wgetch(a);
+            if (ch == 'n')
+                delete_char(a, 1, 1, 95);
+        } while (ch != 'y');
+        // Вывод результата ввода суммарной толщины
+        wmove(sub1, 5, 3);
+        wprintw(sub1, "total thickness  %d mm", thick_first_part);
+        wmove(sub1, 5, 1);
+        waddch(sub1, ACS_DIAMOND);
+        wmove(sub1, 5, 27);
+        waddch(sub1, ACS_RARROW); // стрелка вправо
+        wrefresh(sub1);
+
+        /* Ввод суммы вторых сминаемых в другом направлении деталей */
+        do
+        {
+            wclear(a);
+            wbkgd(a, COLOR_PAIR(6));
+            wmove(a, 0, 2);
+            waddstr(a, "4.Enter the total thickness of the parts bearing in the other direction (mm): ");
+            wgetnstr(a, info_thick_second_part, 2);
+            thick_second_part = atoi(info_thick_second_part);
+            wmove(a, 1, 4);
+            wprintw(a, "Total thickness of parts bearing is %d mm. If the information is correct then press 'y', "
+                       "if incorrect press 'n' ", thick_second_part);
+            ch = (char) wgetch(a);
+            if (ch == 'n')
+                delete_char(a, 1, 1, 95);
+        } while (ch != 'y');
+        // Вывод результата ввода суммарной толщины
+        wmove(sub1, 6, 3);
+        wprintw(sub1, "total thickness  %d mm", thick_second_part);
+        wmove(sub1, 6, 1);
+        waddch(sub1, ACS_DIAMOND);
+        wmove(sub1, 6, 27);
+        waddch(sub1, ACS_LARROW); // стрелка влево
         wrefresh(sub1);
     }
 }
