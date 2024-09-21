@@ -9,8 +9,8 @@
 
 int main(void)
 {
-    WINDOW *sub1, *a;
-    int maxx, maxy;
+    WINDOW *sub1, *a, *b;
+    int maxx, maxy, halfx, halfy;
 
     initscr();
 
@@ -29,6 +29,7 @@ int main(void)
     init_pair(4, COLOR_BLACK, USER1);        // базовый ядовито желтый цвет
     init_pair(5, COLOR_BLACK, USER2);        // базовый зеленый цвет
     init_pair(6, COLOR_BLACK, USER3);        // базовый  салатово-желтый цвет
+    init_pair(7, COLOR_WHITE, COLOR_BLUE);   // окно b - базовый синий
     slk_color(0);
 
     // Базовое окно терминала
@@ -37,18 +38,22 @@ int main(void)
 
     // Определяем размеры и положение доп. окон
     getmaxyx(stdscr, maxy, maxx);
+    halfx = maxx >> 1;
+    halfy = maxy >> 1;
 
     // Создаем доп. окна
-    sub1 = subwin(stdscr, maxy - 4, maxx - 2, 3, 1); // окно таблицы
-    a = subwin(stdscr, LINES - 28, COLS - 2, 1, 1);  // диалоговое окно
+    sub1 = subwin(stdscr, maxy - 4, maxx - 2, 3, 1);     // окно введенных и полученных данных
+    a = subwin(stdscr, LINES - 28, COLS - 2, 1, 1);      // диалоговое окно
+    b = subwin(stdscr, halfy + 10, halfx - 1, 4, halfx); // окно для эскиза
 
-    if (sub1 == NULL || a == NULL)
+    if (sub1 == NULL || a == NULL || b == NULL)
     {
         endwin();
         puts("Unable to create subwindow");
         return (1);
     }
     wbkgd(a, COLOR_PAIR(2));
+    wbkgd(b, COLOR_PAIR(7));
 
     /* здесь будет основной код */
     // 1. Вводим исходные данные
@@ -56,6 +61,7 @@ int main(void)
 
     wrefresh(sub1);
     wrefresh(a);
+    wrefresh(b);
     refresh();
 
     getch();
