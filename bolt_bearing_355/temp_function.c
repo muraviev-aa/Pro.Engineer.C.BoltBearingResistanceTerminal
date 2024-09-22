@@ -1,7 +1,7 @@
 #include "temp_function.h"
 #include <stdlib.h>
 
-void data_entry_dialog(WINDOW *sub1, WINDOW *a)
+void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
 {
     int bolt_diam;
     int number_slices;
@@ -75,6 +75,8 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a)
     wprintw(sub1, "number of slices  is %d", number_slices);
     wmove(sub1, 4, 1);
     waddch(sub1, ACS_DIAMOND);
+    // Рисуем эскиз болта
+    block_bolt(b, number_slices);
     wrefresh(sub1);
 
     if (number_slices == 1) // если один расчетный срез
@@ -180,6 +182,78 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a)
         waddch(sub1, ACS_LARROW); // стрелка влево
         wrefresh(sub1);
     }
+}
+
+/* Рисуем эскиз болта */
+void block_bolt(WINDOW *b, int number_slices)
+{
+    // головка болта
+    for (int j = 25; j <= 33; j++)
+    {
+        wmove(b, 4, j);
+        waddch(b, ACS_BLOCK);
+    }
+    // тело болта
+    for (int i = 5; i <= 15; i++)
+    {
+        wmove(b, i, 29);
+        waddch(b, ACS_LANTERN);
+    }
+    // 1-я гайка
+    for (int j = 25; j <= 33; j++)
+    {
+        wmove(b, 16, j);
+        waddch(b, ACS_BLOCK);
+    }
+    // 2-я гайка
+    for (int j = 25; j <= 33; j++)
+    {
+        wmove(b, 18, j);
+        waddch(b, ACS_BLOCK);
+    }
+    // промежутки
+    wmove(b, 17, 29);
+    waddch(b, ACS_LANTERN);
+    wmove(b, 19, 29);
+    waddch(b, ACS_LANTERN);
+    /* Рисуем деталь под головкой болта */
+    for (int i = 19; i <= 27; i++)
+    {
+        wmove(b, 7, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, 7, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, 7, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, 7, i);
+        waddch(b, ACS_BOARD);
+    }
+    for (int i = 19; i <= 27; i++)
+    {
+        wmove(b, 8, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, 8, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, 8, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, 8, i);
+        waddch(b, ACS_BOARD);
+    }
+    for (int i = 31; i <= 33; i++)
+    {
+        wmove(b, 7, i);
+        waddch(b, ACS_BOARD);
+    }
+    for (int i = 31; i <= 33; i++)
+    {
+        wmove(b, 8, i);
+        waddch(b, ACS_BOARD);
+    }
+    wmove(b, 7, 17);
+    waddch(b, ACS_LARROW); // стрелка влево
+    wmove(b, 8, 17);
+    waddch(b, ACS_LARROW); // стрелка влево
+    wrefresh(b);
 }
 
 void delete_char(WINDOW *w, int row, int column, int count_ch)

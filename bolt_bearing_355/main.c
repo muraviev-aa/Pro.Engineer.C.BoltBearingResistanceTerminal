@@ -57,7 +57,7 @@ int main(void)
 
     /* здесь будет основной код */
     // 1. Вводим исходные данные
-    data_entry_dialog(sub1, a);
+    data_entry_dialog(sub1, a, b);
 
     wrefresh(sub1);
     wrefresh(a);
