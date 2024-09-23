@@ -184,7 +184,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     }
 }
 
-/* Рисуем эскиз болта */
+/* Блок болта */
 void block_bolt(WINDOW *b, int number_slices)
 {
     // головка болта
@@ -216,46 +216,114 @@ void block_bolt(WINDOW *b, int number_slices)
     waddch(b, ACS_LANTERN);
     wmove(b, 19, 29);
     waddch(b, ACS_LANTERN);
-    /* Рисуем деталь под головкой болта */
-    for (int i = 19; i <= 27; i++)
+
+    if (number_slices == 1)
     {
-        wmove(b, 7, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, 7, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, 7, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, 7, i);
-        waddch(b, ACS_BOARD);
-    }
-    for (int i = 19; i <= 27; i++)
+        first_part_block(b, 7);
+        second_part_block(b, 11);
+    } else
     {
-        wmove(b, 8, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, 8, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, 8, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, 8, i);
-        waddch(b, ACS_BOARD);
+        first_part_block(b, 6);
+        second_part_block(b, 9);
+        first_part_block(b, 13);
     }
-    for (int i = 31; i <= 33; i++)
-    {
-        wmove(b, 7, i);
-        waddch(b, ACS_BOARD);
-    }
-    for (int i = 31; i <= 33; i++)
-    {
-        wmove(b, 8, i);
-        waddch(b, ACS_BOARD);
-    }
-    wmove(b, 7, 17);
-    waddch(b, ACS_LARROW); // стрелка влево
-    wmove(b, 8, 17);
-    waddch(b, ACS_LARROW); // стрелка влево
+
     wrefresh(b);
 }
 
+/* Блок первой детали */
+void first_part_block(WINDOW *b, int position)
+{
+    for (int i = 19; i <= 27; i++)
+    {
+        wmove(b, position, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, position, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, position, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, position, i);
+        waddch(b, ACS_BOARD);
+    }
+    for (int i = 19; i <= 27; i++)
+    {
+        wmove(b, position + 1, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, position + 1, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, position + 1, i);
+        waddch(b, ACS_BOARD);
+        wmove(b, position + 1, i);
+        waddch(b, ACS_BOARD);
+    }
+    for (int i = 31; i <= 33; i++)
+    {
+        wmove(b, position, i);
+        waddch(b, ACS_BOARD);
+    }
+    for (int i = 31; i <= 33; i++)
+    {
+        wmove(b, position + 1, i);
+        waddch(b, ACS_BOARD);
+    }
+    wmove(b, position, 17);
+    waddch(b, ACS_LARROW); // стрелка влево
+    wmove(b, position + 1, 17);
+    waddch(b, ACS_LARROW); // стрелка влево
+}
+
+/*  Блок второй детали  */
+void second_part_block(WINDOW *b, int position)
+{
+    for (int i = 25; i <= 27; i++)
+    {
+        wmove(b, position, i);
+        waddch(b, ACS_CKBOARD);
+        wmove(b, position, i);
+        waddch(b, ACS_CKBOARD);
+        wmove(b, position, i);
+        waddch(b, ACS_CKBOARD);
+        wmove(b, position, i);
+        waddch(b, ACS_CKBOARD);
+    }
+    for (int i = 25; i <= 27; i++)
+    {
+        wmove(b, position + 1, i);
+        waddch(b, ACS_CKBOARD);
+        wmove(b, position + 1, i);
+        waddch(b, ACS_CKBOARD);
+        wmove(b, position + 1, i);
+        waddch(b, ACS_CKBOARD);
+        wmove(b, position + 1, i);
+        waddch(b, ACS_CKBOARD);
+    }
+    for (int i = 25; i <= 27; i++)
+    {
+        wmove(b, position + 2, i);
+        waddch(b, ACS_CKBOARD);
+        wmove(b, position + 2, i);
+        waddch(b, ACS_CKBOARD);
+        wmove(b, position + 2, i);
+        waddch(b, ACS_CKBOARD);
+        wmove(b, position + 2, i);
+        waddch(b, ACS_CKBOARD);
+    }
+    for (int i = position; i <= position + 2; i++)
+    {
+        for (int j = 31; j <= 40; j++)
+        {
+            wmove(b, i, j);
+            waddch(b, ACS_CKBOARD);
+        }
+    }
+    for (int i = position; i <= position + 2; i++)
+    {
+        wmove(b, i, 42);
+        waddch(b, ACS_RARROW); // стрелка вправо
+    }
+}
+
+/* Удаляем ранее введенные символы */
 void delete_char(WINDOW *w, int row, int column, int count_ch)
 {
     for (int i = 0; i < count_ch; i++)
