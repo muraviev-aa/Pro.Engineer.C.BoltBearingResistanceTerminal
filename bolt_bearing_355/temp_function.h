@@ -12,6 +12,9 @@ void delete_char(WINDOW *w, int row, int column, int count_ch);
 // Блок болта
 void block_bolt(WINDOW *b, int number_slices);
 
+// Блок шайбы
+void block_washer(WINDOW *b, int position);
+
 // Блок первой детали
 void first_part_block(WINDOW *b, int position);
 

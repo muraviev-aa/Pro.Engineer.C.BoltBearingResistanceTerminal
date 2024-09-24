@@ -77,6 +77,9 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     waddch(sub1, ACS_DIAMOND);
     // Рисуем эскиз болта
     block_bolt(b, number_slices);
+    // Рисуем шайбы
+    block_washer(b, 5);
+    block_washer(b, 15);
     wrefresh(sub1);
 
     if (number_slices == 1) // если один расчетный срез
@@ -103,7 +106,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         wmove(sub1, 5, 1);
         waddch(sub1, ACS_DIAMOND);
         wmove(sub1, 5, 27);
-        waddch(sub1, ACS_RARROW); // стрелка вправо
+        waddch(sub1, ACS_LARROW); // стрелка влево
         wrefresh(sub1);
 
         /* Ввод толщины второй сминаемой в одном направлении детали */
@@ -128,7 +131,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         wmove(sub1, 6, 1);
         waddch(sub1, ACS_DIAMOND);
         wmove(sub1, 6, 27);
-        waddch(sub1, ACS_LARROW); // стрелка влево
+        waddch(sub1, ACS_RARROW); // стрелка вправо
         wrefresh(sub1);
     } else
     {
@@ -154,7 +157,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         wmove(sub1, 5, 1);
         waddch(sub1, ACS_DIAMOND);
         wmove(sub1, 5, 27);
-        waddch(sub1, ACS_RARROW); // стрелка вправо
+        waddch(sub1, ACS_LARROW); // стрелка влево
         wrefresh(sub1);
 
         /* Ввод суммы вторых сминаемых в другом направлении деталей */
@@ -179,7 +182,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         wmove(sub1, 6, 1);
         waddch(sub1, ACS_DIAMOND);
         wmove(sub1, 6, 27);
-        waddch(sub1, ACS_LARROW); // стрелка влево
+        waddch(sub1, ACS_RARROW); // стрелка вправо
         wrefresh(sub1);
     }
 }
@@ -227,86 +230,71 @@ void block_bolt(WINDOW *b, int number_slices)
         second_part_block(b, 9);
         first_part_block(b, 13);
     }
+    wrefresh(b);
+}
 
+/* Блок шайбы */
+void block_washer(WINDOW *b, int position)
+{
+    wmove(b, position, 24);
+    waddch(b, ACS_HLINE);
+    wmove(b, position, 25);
+    waddch(b, ACS_HLINE);
+    wmove(b, position, 26);
+    waddch(b, ACS_HLINE);
+    wmove(b, position, 27);
+    waddch(b, ACS_HLINE);
+    wmove(b, position, 28);
+    waddch(b, ACS_HLINE);
+    wmove(b, position, 30);
+    waddch(b, ACS_HLINE);
+    wmove(b, position, 31);
+    waddch(b, ACS_HLINE);
+    wmove(b, position, 32);
+    waddch(b, ACS_HLINE);
+    wmove(b, position, 33);
+    waddch(b, ACS_HLINE);
+    wmove(b, position, 34);
+    waddch(b, ACS_HLINE);
     wrefresh(b);
 }
 
 /* Блок первой детали */
 void first_part_block(WINDOW *b, int position)
 {
-    for (int i = 19; i <= 27; i++)
+    for (int i = position; i <= position + 1; i++)
     {
-        wmove(b, position, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, position, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, position, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, position, i);
-        waddch(b, ACS_BOARD);
+        for (int j = 19; j <= 27; j++)
+        {
+            wmove(b, i, j);
+            waddch(b, ACS_BOARD);
+        }
     }
-    for (int i = 19; i <= 27; i++)
+    for (int i = position; i <= position + 1; i++)
     {
-        wmove(b, position + 1, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, position + 1, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, position + 1, i);
-        waddch(b, ACS_BOARD);
-        wmove(b, position + 1, i);
-        waddch(b, ACS_BOARD);
+        for (int j = 31; j <= 33; j++)
+        {
+            wmove(b, i, j);
+            waddch(b, ACS_BOARD);
+        }
     }
-    for (int i = 31; i <= 33; i++)
+    for (int i = position; i <= position + 1; i++)
     {
-        wmove(b, position, i);
-        waddch(b, ACS_BOARD);
+        wmove(b, i, 17);
+        waddch(b, ACS_LARROW); // стрелка влево
     }
-    for (int i = 31; i <= 33; i++)
-    {
-        wmove(b, position + 1, i);
-        waddch(b, ACS_BOARD);
-    }
-    wmove(b, position, 17);
-    waddch(b, ACS_LARROW); // стрелка влево
-    wmove(b, position + 1, 17);
-    waddch(b, ACS_LARROW); // стрелка влево
 }
 
 /*  Блок второй детали  */
 void second_part_block(WINDOW *b, int position)
 {
-    for (int i = 25; i <= 27; i++)
+    for (int i = position; i <= position + 2; i++)
     {
-        wmove(b, position, i);
-        waddch(b, ACS_CKBOARD);
-        wmove(b, position, i);
-        waddch(b, ACS_CKBOARD);
-        wmove(b, position, i);
-        waddch(b, ACS_CKBOARD);
-        wmove(b, position, i);
-        waddch(b, ACS_CKBOARD);
-    }
-    for (int i = 25; i <= 27; i++)
-    {
-        wmove(b, position + 1, i);
-        waddch(b, ACS_CKBOARD);
-        wmove(b, position + 1, i);
-        waddch(b, ACS_CKBOARD);
-        wmove(b, position + 1, i);
-        waddch(b, ACS_CKBOARD);
-        wmove(b, position + 1, i);
-        waddch(b, ACS_CKBOARD);
-    }
-    for (int i = 25; i <= 27; i++)
-    {
-        wmove(b, position + 2, i);
-        waddch(b, ACS_CKBOARD);
-        wmove(b, position + 2, i);
-        waddch(b, ACS_CKBOARD);
-        wmove(b, position + 2, i);
-        waddch(b, ACS_CKBOARD);
-        wmove(b, position + 2, i);
-        waddch(b, ACS_CKBOARD);
+        for (int j = 25; j <= 27; j++)
+        {
+            wmove(b, i, j);
+            waddch(b, ACS_CKBOARD);
+        }
     }
     for (int i = position; i <= position + 2; i++)
     {
