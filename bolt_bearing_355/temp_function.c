@@ -236,26 +236,16 @@ void block_bolt(WINDOW *b, int number_slices)
 /* Блок шайбы */
 void block_washer(WINDOW *b, int position)
 {
-    wmove(b, position, 24);
-    waddch(b, ACS_HLINE);
-    wmove(b, position, 25);
-    waddch(b, ACS_HLINE);
-    wmove(b, position, 26);
-    waddch(b, ACS_HLINE);
-    wmove(b, position, 27);
-    waddch(b, ACS_HLINE);
-    wmove(b, position, 28);
-    waddch(b, ACS_HLINE);
-    wmove(b, position, 30);
-    waddch(b, ACS_HLINE);
-    wmove(b, position, 31);
-    waddch(b, ACS_HLINE);
-    wmove(b, position, 32);
-    waddch(b, ACS_HLINE);
-    wmove(b, position, 33);
-    waddch(b, ACS_HLINE);
-    wmove(b, position, 34);
-    waddch(b, ACS_HLINE);
+    for (int i = 24; i <= 28; i++)
+    {
+        wmove(b, position, i);
+        waddch(b, ACS_HLINE);
+    }
+    for (int i = 30; i <= 34; i++)
+    {
+        wmove(b, position, i);
+        waddch(b, ACS_HLINE);
+    }
     wrefresh(b);
 }
 
