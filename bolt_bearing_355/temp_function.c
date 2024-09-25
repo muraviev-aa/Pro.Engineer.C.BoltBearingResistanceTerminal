@@ -15,16 +15,11 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     /* Пункты входных данных */
     wmove(sub1, 1, 7);
     waddstr(sub1, "Initial data");
-    wmove(sub1, 2, 1);
-    waddch(sub1, ACS_LANTERN);
-    wmove(sub1, 3, 1);
-    waddch(sub1, ACS_LANTERN);
-    wmove(sub1, 4, 1);
-    waddch(sub1, ACS_LANTERN);
-    wmove(sub1, 5, 1);
-    waddch(sub1, ACS_LANTERN);
-    wmove(sub1, 6, 1);
-    waddch(sub1, ACS_LANTERN);
+    for (int i = 2; i <= 6; i++)
+    {
+        wmove(sub1, i, 1);
+        waddch(sub1, ACS_LANTERN);
+    }
     wrefresh(sub1);
 
     /* Ввод диаметра болта */
