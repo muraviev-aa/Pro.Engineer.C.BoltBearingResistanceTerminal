@@ -1,6 +1,22 @@
 #include "temp_function.h"
 #include <stdlib.h>
 
+int open_file(WINDOW *name, FILE **fptr, char *name_file)
+{
+    if ((*fptr = fopen(name_file, "r")) == NULL)
+    {
+        perror("Error opening file");
+        wbkgd(name, COLOR_PAIR(9));
+        wmove(name, 10, 15);
+        wprintw(name, "!!!      ATTENTION     !!!");
+        wmove(name, 11, 15);
+        wprintw(name, "!!! ERROR OPENING FILE !!!"); // файл с данными не найден
+        wrefresh(name);
+        return 1;
+    }
+    return 0;
+}
+
 void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
 {
     int bolt_diam;

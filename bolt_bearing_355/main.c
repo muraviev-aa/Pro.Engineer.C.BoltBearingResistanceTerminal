@@ -2,6 +2,7 @@
 #include "temp_function.h"
 #include <stdio.h>
 
+#define SIZE 1      // число строк в файле
 #define USER 100
 #define USER1 101
 #define USER2 102
@@ -11,6 +12,12 @@ int main(void)
 {
     WINDOW *sub1, *a, *b;
     int maxx, maxy, halfx, halfy;
+    steel *info = (steel *) malloc(SIZE * sizeof(steel));
+    if (!info)
+        printf("Error while allocating memory!\n");
+    FILE *fptr;
+    char file_name[] = "tabl_B_3.csv";
+    int count;   // количество строк в файле
 
     initscr();
 
@@ -56,6 +63,10 @@ int main(void)
     wbkgd(b, COLOR_PAIR(7));
 
     /* здесь будет основной код */
+    // Работа с файлом
+    open_file(sub1, &fptr, file_name);
+    //count = read_data_file(&fptr, info);
+    fclose(fptr);
     // 1. Вводим исходные данные
     data_entry_dialog(sub1, a, b);
 

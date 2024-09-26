@@ -2,6 +2,21 @@
 #define BOLT_BEARING_355_TEMP_FUNCTION_H
 
 #include <curses.h>
+#include <stdlib.h>
+
+typedef struct
+{
+    unsigned int steel_name;       // марка стали
+    double thickness_1;            // толщина листа
+    double thickness_2;            // толщина листа
+    unsigned int r_yn;             // Ryn
+    unsigned int r_un;             // Run
+    unsigned int r_y;              // Ry
+    unsigned int r_u;              // Ru
+} steel;
+
+// Открываем файл
+int open_file(WINDOW *name, FILE **fptr, char *name_file);
 
 // Вводим исходные данные
 void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b);
