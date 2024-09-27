@@ -17,6 +17,32 @@ int open_file(WINDOW *name, FILE **fptr, char *name_file)
     return 0;
 }
 
+int read_data_file(FILE **fptr, steel info[])
+{
+    unsigned int steel_name, r_yn, r_un, r_y, r_u;
+    double thickness_1, thickness_2;
+    int count = 0;
+    while (fscanf(*fptr, "%d;%lf;%lf;%d;%d;%d;%d", &steel_name, &thickness_1, &thickness_2,
+                  &r_yn, &r_un, &r_y, &r_u) > 0)
+    {
+        add_record(info, count, steel_name, thickness_1, thickness_2, r_yn, r_un, r_y, r_u);
+        count++;
+    }
+    return count;
+}
+
+void add_record(steel info[], int number, unsigned int steel_name, double thickness_1, double thickness_2,
+                unsigned int r_yn, unsigned int r_un, unsigned int r_y, unsigned int r_u)
+{
+    info[number].steel_name = steel_name;
+    info[number].thickness_1 = thickness_1;
+    info[number].thickness_2 = thickness_2;
+    info[number].r_yn = r_yn;
+    info[number].r_un = r_un;
+    info[number].r_y = r_y;
+    info[number].r_u = r_u;
+}
+
 void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
 {
     int bolt_diam;

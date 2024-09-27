@@ -18,6 +18,13 @@ typedef struct
 // Открываем файл
 int open_file(WINDOW *name, FILE **fptr, char *name_file);
 
+// Читаем файл
+int read_data_file(FILE **fptr, steel info[]);
+
+// Добавляем запись
+void add_record(steel info[], int number, unsigned int steel_name, double thickness_1, double thickness_2,
+                unsigned int r_yn, unsigned int r_un, unsigned int r_y, unsigned int r_u);
+
 // Вводим исходные данные
 void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b);
 

@@ -65,10 +65,17 @@ int main(void)
     /* здесь будет основной код */
     // Работа с файлом
     open_file(sub1, &fptr, file_name);
-    //count = read_data_file(&fptr, info);
+    count = read_data_file(&fptr, info);
     fclose(fptr);
+
+    // Печатаем количество строк в файле
+    wmove(sub1, 10, 15);
+    wprintw(sub1, "%d", count);
+
     // 1. Вводим исходные данные
     data_entry_dialog(sub1, a, b);
+
+
 
     wrefresh(sub1);
     wrefresh(a);
