@@ -45,10 +45,7 @@ void add_record(steel info[], int number, unsigned int steel_name, double thickn
 
 void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
 {
-    int bolt_diam;
     int number_slices;
-    int thick_first_part;
-    int thick_second_part;
     char info_bolt_diam[3];
     char info_number_slices[2];
     char info_thick_first_part[3];
@@ -72,21 +69,21 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         wmove(a, 0, 2);
         waddstr(a, "1.Enter bolt diameter (mm): ");
         wgetnstr(a, info_bolt_diam, 2);
-        bolt_diam = atoi(info_bolt_diam);
+        package_info[0] = atoi(info_bolt_diam);
         wmove(a, 1, 4);
         wprintw(a, "Bolt diameter is %d mm. If the information is correct then press 'y', "
-                   "if incorrect press 'n' ", bolt_diam);
+                   "if incorrect press 'n' ", package_info[0]);
         ch = (char) wgetch(a);
         if (ch == 'n')
             delete_char(a, 1, 1, 95);
     } while (ch != 'y');
     // Вывод результата ввода диаметра болта
     wmove(sub1, 2, 3);
-    wprintw(sub1, "bolt diameter is %d mm", bolt_diam);
+    wprintw(sub1, "bolt diameter is %d mm", package_info[0]);
     wmove(sub1, 2, 1);
     waddch(sub1, ACS_DIAMOND);
     wmove(sub1, 3, 3);
-    wprintw(sub1, "strength class  is 8.8", bolt_diam);
+    wprintw(sub1, "strength class  is 8.8", package_info[0]);
     wmove(sub1, 3, 1);
     waddch(sub1, ACS_DIAMOND);
     wrefresh(sub1);
@@ -129,17 +126,17 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
             wmove(a, 0, 2);
             waddstr(a, "3.Enter the thickness of the first part (mm): ");
             wgetnstr(a, info_thick_first_part, 2);
-            thick_first_part = atoi(info_thick_first_part);
+            package_info[2] = atoi(info_thick_first_part);
             wmove(a, 1, 4);
             wprintw(a, "Thickness of the first part is %d mm. If the information is correct then press 'y', "
-                       "if incorrect press 'n' ", thick_first_part);
+                       "if incorrect press 'n' ", package_info[2]);
             ch = (char) wgetch(a);
             if (ch == 'n')
                 delete_char(a, 1, 1, 95);
         } while (ch != 'y');
         // Вывод результата ввода толщины первого элемента
         wmove(sub1, 5, 3);
-        wprintw(sub1, "first part    is %d mm", thick_first_part);
+        wprintw(sub1, "first part    is %d mm", package_info[2]);
         wmove(sub1, 5, 1);
         waddch(sub1, ACS_DIAMOND);
         wmove(sub1, 5, 27);
@@ -154,17 +151,17 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
             wmove(a, 0, 2);
             waddstr(a, "4.Enter the thickness of the second part (mm): ");
             wgetnstr(a, info_thick_second_part, 2);
-            thick_second_part = atoi(info_thick_second_part);
+            package_info[3] = atoi(info_thick_second_part);
             wmove(a, 1, 4);
             wprintw(a, "Thickness of the second part is %d mm. If the information is correct then press 'y', "
-                       "if incorrect press 'n' ", thick_second_part);
+                       "if incorrect press 'n' ", package_info[3]);
             ch = (char) wgetch(a);
             if (ch == 'n')
                 delete_char(a, 1, 1, 95);
         } while (ch != 'y');
         // Вывод результата ввода толщины второго элемента
         wmove(sub1, 6, 3);
-        wprintw(sub1, "second part   is %d mm", thick_second_part);
+        wprintw(sub1, "second part   is %d mm", package_info[3]);
         wmove(sub1, 6, 1);
         waddch(sub1, ACS_DIAMOND);
         wmove(sub1, 6, 27);
@@ -180,17 +177,17 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
             wmove(a, 0, 2);
             waddstr(a, "3.Enter the total thickness of parts bearing in one direction (mm): ");
             wgetnstr(a, info_thick_first_part, 2);
-            thick_first_part = atoi(info_thick_first_part);
+            package_info[2] = atoi(info_thick_first_part);
             wmove(a, 1, 4);
             wprintw(a, "Total thickness of parts bearing is %d mm. If the information "
-                       "is correct then press 'y', if incorrect press 'n' ", thick_first_part);
+                       "is correct then press 'y', if incorrect press 'n' ", package_info[2]);
             ch = (char) wgetch(a);
             if (ch == 'n')
                 delete_char(a, 1, 1, 95);
         } while (ch != 'y');
         // Вывод результата ввода суммарной толщины
         wmove(sub1, 5, 3);
-        wprintw(sub1, "total thickness  %d mm", thick_first_part);
+        wprintw(sub1, "total thickness  %d mm", package_info[2]);
         wmove(sub1, 5, 1);
         waddch(sub1, ACS_DIAMOND);
         wmove(sub1, 5, 27);
@@ -205,17 +202,17 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
             wmove(a, 0, 2);
             waddstr(a, "4.Enter the total thickness of the parts bearing in the other direction (mm): ");
             wgetnstr(a, info_thick_second_part, 2);
-            thick_second_part = atoi(info_thick_second_part);
+            package_info[3] = atoi(info_thick_second_part);
             wmove(a, 1, 4);
             wprintw(a, "Total thickness of parts bearing is %d mm. If the information is correct then press 'y', "
-                       "if incorrect press 'n' ", thick_second_part);
+                       "if incorrect press 'n' ", package_info[3]);
             ch = (char) wgetch(a);
             if (ch == 'n')
                 delete_char(a, 1, 1, 95);
         } while (ch != 'y');
         // Вывод результата ввода суммарной толщины
         wmove(sub1, 6, 3);
-        wprintw(sub1, "total thickness  %d mm", thick_second_part);
+        wprintw(sub1, "total thickness  %d mm", package_info[3]);
         wmove(sub1, 6, 1);
         waddch(sub1, ACS_DIAMOND);
         wmove(sub1, 6, 27);
@@ -347,4 +344,34 @@ void delete_char(WINDOW *w, int row, int column, int count_ch)
         waddrawch(w, ' ');
         wrefresh(w);
     }
+}
+
+// Читаем из полученных данных расчетное сопротивление стали
+int design_steel_resistance(WINDOW *sub1, const steel *info, int count)
+{
+    int first_r_u = 0;
+    int second_r_u = 0;
+    int r_u;
+
+    for (int i = 0; i < count; i++)
+    {
+        if (info[i].steel_name == 355 && package_info[2] >= (int) info[i].thickness_1
+            && package_info[2] <= (int) info[i].thickness_2)
+        {
+            first_r_u = info[i].r_u;
+            wmove(sub1, 8, 15);
+            wprintw(sub1, "first = %d N/mm^2", first_r_u);
+        }
+        if (info[i].steel_name == 355 && package_info[3] >= (int) info[i].thickness_1
+            && package_info[3] <= (int) info[i].thickness_2)
+        {
+            second_r_u = info[i].r_u;
+            wmove(sub1, 9, 15);
+            wprintw(sub1, "second = %d N/mm^2", second_r_u);
+        }
+    }
+    r_u = (first_r_u < second_r_u) ? first_r_u : second_r_u;
+    wmove(sub1, 10, 15);
+    wprintw(sub1, "Ru = %d N/mm^2", r_u);
+    return r_u;
 }

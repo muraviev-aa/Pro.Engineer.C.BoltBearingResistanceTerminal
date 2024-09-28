@@ -15,6 +15,14 @@ typedef struct
     unsigned int r_u;              // Ru
 } steel;
 
+/* Массив под входные данные
+ * package_info[0] - диаметр болта
+ * package_info[1] - количество срезов
+ * package_info[2] - толщина (сумма толщин) детали, сминаемой в одну сторону
+ * package_info[3] - толщина (сумма толщин) детали, сминаемой в другую сторону
+*/
+extern int package_info[4];
+
 // Открываем файл
 int open_file(WINDOW *name, FILE **fptr, char *name_file);
 
@@ -42,5 +50,8 @@ void first_part_block(WINDOW *b, int position);
 
 // Блок второй детали
 void second_part_block(WINDOW *b, int position);
+
+// Читаем из полученных данных расчетное сопротивление стали
+int design_steel_resistance(WINDOW *sub1, const steel *info, int count);
 
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H

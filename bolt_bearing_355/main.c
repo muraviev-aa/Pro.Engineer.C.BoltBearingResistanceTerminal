@@ -2,11 +2,14 @@
 #include "temp_function.h"
 #include <stdio.h>
 
-#define SIZE 1      // число строк в файле
+#define SIZE 15      // число строк в файле tabl_B_3.csv
 #define USER 100
 #define USER1 101
 #define USER2 102
 #define USER3 103
+
+// Массив под входные данные
+int package_info[4];
 
 int main(void)
 {
@@ -18,6 +21,7 @@ int main(void)
     FILE *fptr;
     char file_name[] = "tabl_B_3.csv";
     int count;   // количество строк в файле
+    int r_u;
 
     initscr();
 
@@ -62,19 +66,18 @@ int main(void)
     wbkgd(a, COLOR_PAIR(2));
     wbkgd(b, COLOR_PAIR(7));
 
-    /* здесь будет основной код */
     // Работа с файлом
     open_file(sub1, &fptr, file_name);
     count = read_data_file(&fptr, info);
     fclose(fptr);
 
-    // Печатаем количество строк в файле
-    wmove(sub1, 10, 15);
-    wprintw(sub1, "%d", count);
-
     // 1. Вводим исходные данные
     data_entry_dialog(sub1, a, b);
 
+    // 2. Читаем из полученных данных расчетное сопротивление стали
+    r_u = design_steel_resistance(sub1, info, count);
+
+    // 3. Рисуем таблицу под данные из файлов
 
 
     wrefresh(sub1);
