@@ -118,22 +118,17 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
 
     if (number_slices == 1) // если один расчетный срез
     {
+        char thick_first_1[47] = "3.Enter the thickness of the first part (mm): ";
+        char thick_first_2[108] = "Thickness of the first part is %d mm. If the information "
+                                  "is correct then press 'y', if incorrect press 'n' ";
+        char thick_second_1[48] = "4.Enter the thickness of the second part (mm): ";
+        char thick_second_2[109] = "Thickness of the second part is %d mm. If the information "
+                                   "is correct then press 'y', if incorrect press 'n' ";
+
         /* Ввод толщины первой сминаемой в одном направлении детали */
-        do
-        {
-            wclear(a);
-            wbkgd(a, COLOR_PAIR(5));
-            wmove(a, 0, 2);
-            waddstr(a, "3.Enter the thickness of the first part (mm): ");
-            wgetnstr(a, info_thick_first_part, 2);
-            package_info[2] = atoi(info_thick_first_part);
-            wmove(a, 1, 4);
-            wprintw(a, "Thickness of the first part is %d mm. If the information is correct then press 'y', "
-                       "if incorrect press 'n' ", package_info[2]);
-            ch = (char) wgetch(a);
-            if (ch == 'n')
-                delete_char(a, 1, 1, 95);
-        } while (ch != 'y');
+        enter_thick_info(a, 5, 2, info_thick_first_part, ch,
+                         thick_first_1, thick_first_2);
+
         // Вывод результата ввода толщины первого элемента
         wmove(sub1, 5, 3);
         wprintw(sub1, "first part    is %d mm", package_info[2]);
@@ -144,21 +139,9 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         wrefresh(sub1);
 
         /* Ввод толщины второй сминаемой в одном направлении детали */
-        do
-        {
-            wclear(a);
-            wbkgd(a, COLOR_PAIR(6));
-            wmove(a, 0, 2);
-            waddstr(a, "4.Enter the thickness of the second part (mm): ");
-            wgetnstr(a, info_thick_second_part, 2);
-            package_info[3] = atoi(info_thick_second_part);
-            wmove(a, 1, 4);
-            wprintw(a, "Thickness of the second part is %d mm. If the information is correct then press 'y', "
-                       "if incorrect press 'n' ", package_info[3]);
-            ch = (char) wgetch(a);
-            if (ch == 'n')
-                delete_char(a, 1, 1, 95);
-        } while (ch != 'y');
+        enter_thick_info(a, 6, 3, info_thick_second_part, ch,
+                         thick_second_1, thick_second_2);
+
         // Вывод результата ввода толщины второго элемента
         wmove(sub1, 6, 3);
         wprintw(sub1, "second part   is %d mm", package_info[3]);
@@ -169,22 +152,17 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         wrefresh(sub1);
     } else
     {
+        char thick_first_1[69] = "3.Enter the total thickness of parts bearing in one direction (mm): ";
+        char thick_first_2[113] = "Total thickness of parts bearing is %d mm. If the information "
+                                  "is correct then press 'y', if incorrect press 'n' ";
+        char thick_second_1[79] = "4.Enter the total thickness of the parts bearing in the other direction (mm): ";
+        char thick_second_2[113] = "Total thickness of parts bearing is %d mm. If the information "
+                                   "is correct then press 'y', if incorrect press 'n' ";
+
         /* Ввод суммы первых сминаемых в одном направлении деталей */
-        do
-        {
-            wclear(a);
-            wbkgd(a, COLOR_PAIR(5));
-            wmove(a, 0, 2);
-            waddstr(a, "3.Enter the total thickness of parts bearing in one direction (mm): ");
-            wgetnstr(a, info_thick_first_part, 2);
-            package_info[2] = atoi(info_thick_first_part);
-            wmove(a, 1, 4);
-            wprintw(a, "Total thickness of parts bearing is %d mm. If the information "
-                       "is correct then press 'y', if incorrect press 'n' ", package_info[2]);
-            ch = (char) wgetch(a);
-            if (ch == 'n')
-                delete_char(a, 1, 1, 95);
-        } while (ch != 'y');
+        enter_thick_info(a, 5, 2, info_thick_first_part, ch,
+                         thick_first_1, thick_first_2);
+
         // Вывод результата ввода суммарной толщины
         wmove(sub1, 5, 3);
         wprintw(sub1, "total thickness  %d mm", package_info[2]);
@@ -195,21 +173,9 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         wrefresh(sub1);
 
         /* Ввод суммы вторых сминаемых в другом направлении деталей */
-        do
-        {
-            wclear(a);
-            wbkgd(a, COLOR_PAIR(6));
-            wmove(a, 0, 2);
-            waddstr(a, "4.Enter the total thickness of the parts bearing in the other direction (mm): ");
-            wgetnstr(a, info_thick_second_part, 2);
-            package_info[3] = atoi(info_thick_second_part);
-            wmove(a, 1, 4);
-            wprintw(a, "Total thickness of parts bearing is %d mm. If the information is correct then press 'y', "
-                       "if incorrect press 'n' ", package_info[3]);
-            ch = (char) wgetch(a);
-            if (ch == 'n')
-                delete_char(a, 1, 1, 95);
-        } while (ch != 'y');
+        enter_thick_info(a, 6, 3, info_thick_first_part, ch,
+                         thick_second_1, thick_second_2);
+
         // Вывод результата ввода суммарной толщины
         wmove(sub1, 6, 3);
         wprintw(sub1, "total thickness  %d mm", package_info[3]);
@@ -219,6 +185,25 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         waddch(sub1, ACS_RARROW); // стрелка вправо
         wrefresh(sub1);
     }
+}
+
+// Ввод толщин соединяемых деталей
+void enter_thick_info(WINDOW *a, int color, int num, char *arr, char ch, const char *text_1, const char *text_2)
+{
+    do
+    {
+        wclear(a);
+        wbkgd(a, COLOR_PAIR(color));
+        wmove(a, 0, 2);
+        waddstr(a, text_1);
+        wgetnstr(a, arr, 2);
+        package_info[num] = atoi(arr);
+        wmove(a, 1, 4);
+        wprintw(a, text_2, package_info[num]);
+        ch = (char) wgetch(a);
+        if (ch == 'n')
+            delete_char(a, 1, 1, 95);
+    } while (ch != 'y');
 }
 
 /* Блок болта */
