@@ -129,7 +129,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         enter_thick_info(a, 5, 2, info_thick_first_part, ch,
                          thick_first_1, thick_first_2);
 
-        // Вывод результата ввода толщины первого элемента
+        // Вывод результата ввода толщины первого элемента сминаемого в одном направлении
         wmove(sub1, 5, 3);
         wprintw(sub1, "first part    is %d mm", package_info[2]);
         wmove(sub1, 5, 1);
@@ -138,11 +138,11 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         waddch(sub1, ACS_LARROW); // стрелка влево
         wrefresh(sub1);
 
-        /* Ввод толщины второй сминаемой в одном направлении детали */
+        /* Ввод толщины второй сминаемой в другом направлении детали */
         enter_thick_info(a, 6, 3, info_thick_second_part, ch,
                          thick_second_1, thick_second_2);
 
-        // Вывод результата ввода толщины второго элемента
+        // Вывод результата ввода толщины второго элемента сминаемого в другом направлении
         wmove(sub1, 6, 3);
         wprintw(sub1, "second part   is %d mm", package_info[3]);
         wmove(sub1, 6, 1);
