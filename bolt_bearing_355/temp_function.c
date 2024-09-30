@@ -121,6 +121,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         char thick_first_1[47] = "3.Enter the thickness of the first part (mm): ";
         char thick_first_2[108] = "Thickness of the first part is %d mm. If the information "
                                   "is correct then press 'y', if incorrect press 'n' ";
+        char thick_first_3[23] = "first part    is %d mm";
         char thick_second_1[48] = "4.Enter the thickness of the second part (mm): ";
         char thick_second_2[109] = "Thickness of the second part is %d mm. If the information "
                                    "is correct then press 'y', if incorrect press 'n' ";
@@ -131,11 +132,11 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
 
         // Вывод результата ввода толщины первого элемента сминаемого в одном направлении
         wmove(sub1, 5, 3);
-        wprintw(sub1, "first part    is %d mm", package_info[2]);
+        wprintw(sub1, thick_first_3, package_info[2]);
         wmove(sub1, 5, 1);
         waddch(sub1, ACS_DIAMOND);
         wmove(sub1, 5, 27);
-        waddch(sub1, ACS_LARROW); // стрелка влево
+        waddch(sub1, ACS_LARROW);
         wrefresh(sub1);
 
         /* Ввод толщины второй сминаемой в другом направлении детали */
@@ -148,7 +149,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         wmove(sub1, 6, 1);
         waddch(sub1, ACS_DIAMOND);
         wmove(sub1, 6, 27);
-        waddch(sub1, ACS_RARROW); // стрелка вправо
+        waddch(sub1, ACS_RARROW);
         wrefresh(sub1);
     } else
     {
@@ -188,18 +189,18 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
 }
 
 // Ввод толщин соединяемых деталей
-void enter_thick_info(WINDOW *a, int color, int num, char *arr, char ch, const char *text_1, const char *text_2)
+void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch, const char *text_1, const char *text_2)
 {
     do
     {
         wclear(a);
-        wbkgd(a, COLOR_PAIR(color));
+        wbkgd(a, COLOR_PAIR(color_pair));
         wmove(a, 0, 2);
         waddstr(a, text_1);
         wgetnstr(a, arr, 2);
-        package_info[num] = atoi(arr);
+        package_info[num_arr] = atoi(arr);
         wmove(a, 1, 4);
-        wprintw(a, text_2, package_info[num]);
+        wprintw(a, text_2, package_info[num_arr]);
         ch = (char) wgetch(a);
         if (ch == 'n')
             delete_char(a, 1, 1, 95);
@@ -345,18 +346,54 @@ int design_steel_resistance(WINDOW *sub1, const steel *info, int count)
         {
             first_r_u = info[i].r_u;
             wmove(sub1, 8, 15);
-            wprintw(sub1, "first = %d N/mm^2", first_r_u);
+            //wprintw(sub1, "first = %d N/mm^2", first_r_u);
         }
         if (info[i].steel_name == 355 && package_info[3] >= (int) info[i].thickness_1
             && package_info[3] <= (int) info[i].thickness_2)
         {
             second_r_u = info[i].r_u;
             wmove(sub1, 9, 15);
-            wprintw(sub1, "second = %d N/mm^2", second_r_u);
+            //wprintw(sub1, "second = %d N/mm^2", second_r_u);
         }
     }
     r_u = (first_r_u < second_r_u) ? first_r_u : second_r_u;
-    wmove(sub1, 10, 15);
-    wprintw(sub1, "Ru = %d N/mm^2", r_u);
+    //wmove(sub1, 10, 15);
+    //wprintw(sub1, "Ru = %d N/mm^2", r_u);
     return r_u;
+}
+
+// Рисуем таблицу
+void draw_table(WINDOW *sub1)
+{
+    // 1-я горизонтальная линия
+    wmove(sub1, 8, 1);
+    waddch(sub1, ACS_ULCORNER); // верхний левый угол
+    wmove(sub1, 8, 56);
+    waddch(sub1, ACS_URCORNER); // верхний левый угол
+    wmove(sub1, 8, 14);
+    waddch(sub1, ACS_TTEE);     // начало 1-ой разделит. линии
+    wmove(sub1, 8, 28);
+    waddch(sub1, ACS_TTEE);     // начало 2-ой разделит. линии
+    wmove(sub1, 8, 42);
+    waddch(sub1, ACS_TTEE);     // начало 3-ей разделит. линии
+    for (int i = 2; i < 14; i++)
+    {
+        wmove(sub1, 8, i);
+        waddch(sub1, ACS_HLINE); // горизонтальная линия
+    }
+    for (int i = 15; i < 28; i++)
+    {
+        wmove(sub1, 8, i);
+        waddch(sub1, ACS_HLINE); // горизонтальная линия
+    }
+    for (int i = 29; i < 42; i++)
+    {
+        wmove(sub1, 8, i);
+        waddch(sub1, ACS_HLINE); // горизонтальная линия
+    }
+    for (int i = 43; i < 56; i++)
+    {
+        wmove(sub1, 8, i);
+        waddch(sub1, ACS_HLINE); // горизонтальная линия
+    }
 }

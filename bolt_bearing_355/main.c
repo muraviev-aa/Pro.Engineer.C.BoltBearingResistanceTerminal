@@ -78,6 +78,7 @@ int main(void)
     r_u = design_steel_resistance(sub1, info, count);
 
     // 3. Рисуем таблицу под данные из файлов
+    draw_table(sub1);
 
 
     wrefresh(sub1);

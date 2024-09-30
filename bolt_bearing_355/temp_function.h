@@ -55,6 +55,10 @@ void second_part_block(WINDOW *b, int position);
 int design_steel_resistance(WINDOW *sub1, const steel *info, int count);
 
 // Ввод толщин соединяемых деталей
-void enter_thick_info(WINDOW *a, int color, int num, char *arr, char ch, const char *text_1, const char *text_2);
+void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch,
+                      const char *text_1, const char *text_2);
+
+// Рисуем таблицу
+void draw_table(WINDOW *sub1);
 
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H
