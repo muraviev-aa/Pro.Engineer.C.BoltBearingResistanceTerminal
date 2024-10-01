@@ -80,6 +80,9 @@ int main(void)
     // 3. Рисуем таблицу под данные из файлов
     draw_table(sub1);
 
+    // 4. Заполняем данными таблицу
+    data_draw_table(sub1, r_u);
+
 
     wrefresh(sub1);
     wrefresh(a);

@@ -3,6 +3,7 @@
 
 #include <curses.h>
 #include <stdlib.h>
+#include <math.h>
 
 typedef struct
 {
@@ -60,5 +61,8 @@ void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch
 
 // Рисуем таблицу
 void draw_table(WINDOW *sub1);
+
+// Заполняем таблицу
+void data_draw_table(WINDOW *sub1, int r_u);
 
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H
