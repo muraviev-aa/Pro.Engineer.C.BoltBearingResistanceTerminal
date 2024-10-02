@@ -16,6 +16,15 @@ typedef struct
     unsigned int r_u;              // Ru
 } steel;
 
+typedef struct
+{
+    double class;            // класс прочности болта
+    unsigned int r_bun;      // Rbun
+    unsigned int r_byn;      // Rbyn
+    unsigned int r_bs;       // Rbs
+    unsigned int r_bt;       // Rbt
+} bolt;
+
 /* Массив под входные данные
  * package_info[0] - диаметр болта
  * package_info[1] - количество срезов
@@ -25,14 +34,21 @@ typedef struct
 extern int package_info[4];
 
 // Открываем файл
-int open_file(WINDOW *name, FILE **fptr, char *name_file);
+int open_file(WINDOW *name, FILE **fptr, char *name_file, int position);
 
-// Читаем файл
-int read_data_file(FILE **fptr, steel info[]);
+// Читаем файл c данными по стали
+int read_data_file_steel(FILE **fptr, steel info[]);
 
-// Добавляем запись
-void add_record(steel info[], int number, unsigned int steel_name, double thickness_1, double thickness_2,
-                unsigned int r_yn, unsigned int r_un, unsigned int r_y, unsigned int r_u);
+// Читаем файл c данными по болтам
+int read_data_file_bolt(FILE **fptr, bolt info[]);
+
+// Добавляем запись прочностных характеристик стали
+void add_record_steel(steel info[], int number, unsigned int steel_name, double thickness_1, double thickness_2,
+                      unsigned int r_yn, unsigned int r_un, unsigned int r_y, unsigned int r_u);
+
+// Добавляем запись прочностных характеристик болтов
+void add_record_bolt(bolt info[], int number, double class, unsigned int r_bun, unsigned int r_byn,
+                     unsigned int r_bs, unsigned int r_bt);
 
 // Вводим исходные данные
 void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b);

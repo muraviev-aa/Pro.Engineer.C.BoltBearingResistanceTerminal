@@ -1,15 +1,17 @@
 #include "temp_function.h"
 #include <stdlib.h>
 
-int open_file(WINDOW *name, FILE **fptr, char *name_file)
+int open_file(WINDOW *name, FILE **fptr, char *name_file, int position)
 {
     if ((*fptr = fopen(name_file, "r")) == NULL)
     {
         perror("Error opening file");
         wbkgd(name, COLOR_PAIR(9));
-        wmove(name, 10, 15);
+        wmove(name, position, 15);
         wprintw(name, "!!!      ATTENTION     !!!");
-        wmove(name, 11, 15);
+        wmove(name, position + 1, 15);
+        wprintw(name, "!!!    %s    !!!", name_file);
+        wmove(name, position + 2, 15);
         wprintw(name, "!!! ERROR OPENING FILE !!!"); // файл с данными не найден
         wrefresh(name);
         return 1;
@@ -17,7 +19,7 @@ int open_file(WINDOW *name, FILE **fptr, char *name_file)
     return 0;
 }
 
-int read_data_file(FILE **fptr, steel info[])
+int read_data_file_steel(FILE **fptr, steel info[])
 {
     unsigned int steel_name, r_yn, r_un, r_y, r_u;
     double thickness_1, thickness_2;
@@ -25,14 +27,28 @@ int read_data_file(FILE **fptr, steel info[])
     while (fscanf(*fptr, "%d;%lf;%lf;%d;%d;%d;%d", &steel_name, &thickness_1, &thickness_2,
                   &r_yn, &r_un, &r_y, &r_u) > 0)
     {
-        add_record(info, count, steel_name, thickness_1, thickness_2, r_yn, r_un, r_y, r_u);
+        add_record_steel(info, count, steel_name, thickness_1, thickness_2, r_yn, r_un, r_y, r_u);
         count++;
     }
     return count;
 }
 
-void add_record(steel info[], int number, unsigned int steel_name, double thickness_1, double thickness_2,
-                unsigned int r_yn, unsigned int r_un, unsigned int r_y, unsigned int r_u)
+int read_data_file_bolt(FILE **fptr, bolt info[])
+{
+    double class;
+    unsigned int r_bun, r_byn, r_bs, r_bt;
+    int count = 0;
+    while (fscanf(*fptr, "%lf;%d;%d;%d;%d", &class, &r_bun, &r_byn,
+                  &r_bs, &r_bt) > 0)
+    {
+        add_record_bolt(info, count, class, r_bun, r_byn, r_bs, r_bt);
+        count++;
+    }
+    return count;
+}
+
+void add_record_steel(steel info[], int number, unsigned int steel_name, double thickness_1, double thickness_2,
+                      unsigned int r_yn, unsigned int r_un, unsigned int r_y, unsigned int r_u)
 {
     info[number].steel_name = steel_name;
     info[number].thickness_1 = thickness_1;
@@ -41,6 +57,16 @@ void add_record(steel info[], int number, unsigned int steel_name, double thickn
     info[number].r_un = r_un;
     info[number].r_y = r_y;
     info[number].r_u = r_u;
+}
+
+void add_record_bolt(bolt info[], int number, double class, unsigned int r_bun, unsigned int r_byn,
+                     unsigned int r_bs, unsigned int r_bt)
+{
+    info[number].class = class;
+    info[number].r_bun = r_bun;
+    info[number].r_byn = r_byn;
+    info[number].r_bs = r_bs;
+    info[number].r_bt = r_bt;
 }
 
 void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
@@ -53,7 +79,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     char ch;
     /* Пункты входных данных */
     wmove(sub1, 1, 7);
-    waddstr(sub1, "Initial data");
+    waddstr(sub1, "Initial data:");
     for (int i = 2; i <= 6; i++)
     {
         wmove(sub1, i, 1);
@@ -471,19 +497,27 @@ void data_draw_table(WINDOW *sub1, int r_u)
     wprintw(sub1, "Data  name");
     wmove(sub1, 11, 6);
     wprintw(sub1, "C355");
+    wmove(sub1, 13, 3);
+    wprintw(sub1, "bolt 8.8;B");
     /* Заполнение Ru */
     wmove(sub1, 9, 20);
     wprintw(sub1, "Ru");
     wmove(sub1, 11, 17);
     wprintw(sub1, "%d N/mm^2", r_u);
+    wmove(sub1, 13, 21);
+    waddch(sub1, ACS_HLINE);
     /* Заполнение Rbp */
     wmove(sub1, 9, 34);
     wprintw(sub1, "Rbp");
     wmove(sub1, 11, 31);
     wprintw(sub1, "%.f N/mm^2", (double) r_u * 1.35);
+    wmove(sub1, 13, 35);
+    waddch(sub1, ACS_HLINE);
     /* Заполнение Rbt */
     wmove(sub1, 9, 48);
     wprintw(sub1, "Rbt");
     wmove(sub1, 11, 49);
     waddch(sub1, ACS_HLINE);
+    wmove(sub1, 13, 45);
+    wprintw(sub1, "451 N/mm^2");
 }

@@ -2,7 +2,8 @@
 #include "temp_function.h"
 #include <stdio.h>
 
-#define SIZE 15      // число строк в файле tabl_B_3.csv
+#define SIZE_STEEL 15      // число строк в файле tabl_B_3.csv
+#define SIZE_BOLT 5        // число строк в файле tabl_G_5.csv
 #define USER 100
 #define USER1 101
 #define USER2 102
@@ -15,13 +16,18 @@ int main(void)
 {
     WINDOW *sub1, *a, *b;
     int maxx, maxy, halfx, halfy;
-    steel *info = (steel *) malloc(SIZE * sizeof(steel));
-    if (!info)
+    steel *info_st = (steel *) malloc(SIZE_STEEL * sizeof(steel));
+    bolt *info_blt = (bolt *) malloc(SIZE_BOLT * sizeof (bolt));
+    if (!info_st || !info_blt)
         printf("Error while allocating memory!\n");
-    FILE *fptr;
-    char file_name[] = "tabl_B_3.csv";
-    int count;   // количество строк в файле
+    FILE *fptr_st;
+    FILE *fptr_blt;
+    char file_name_st[] = "tabl_B_3.csv";
+    char file_name_blt[] = "tabl_G_5.csv";
+    int count_st;    // количество строк в файле tabl_B_3.csv
+    int count_blt;   // количество строк в файле tabl_G_5.csv
     int r_u;
+    int r_bs;
 
     initscr();
 
@@ -66,16 +72,23 @@ int main(void)
     wbkgd(a, COLOR_PAIR(2));
     wbkgd(b, COLOR_PAIR(7));
 
-    // Работа с файлом
-    open_file(sub1, &fptr, file_name);
-    count = read_data_file(&fptr, info);
-    fclose(fptr);
+    // Работа с файлами
+    /* tabl_B_3.csv - данные по стали */
+    open_file(sub1, &fptr_st, file_name_st, 10);
+    count_st = read_data_file_steel(&fptr_st, info_st);
+    fclose(fptr_st);
+    /* tabl_G_5.csv - данные по болтам */
+    open_file(sub1, &fptr_blt, file_name_blt, 15);
+    count_blt = read_data_file_bolt(&fptr_blt, info_blt);
+    fclose(fptr_blt);
+
 
     // 1. Вводим исходные данные
     data_entry_dialog(sub1, a, b);
 
-    // 2. Читаем из полученных данных расчетное сопротивление стали
-    r_u = design_steel_resistance(sub1, info, count);
+    // 2. Читаем из полученных данных Ru и Rbs
+    r_u = design_steel_resistance(sub1, info_st, count_st);
+    // r_bs
 
     // 3. Рисуем таблицу под данные из файлов
     draw_table(sub1);
