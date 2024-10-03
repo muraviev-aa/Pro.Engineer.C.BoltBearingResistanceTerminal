@@ -359,12 +359,12 @@ void delete_char(WINDOW *w, int row, int column, int count_ch)
     }
 }
 
-// Читаем из полученных данных расчетное сопротивление стали
-int design_steel_resistance(WINDOW *sub1, const steel *info, int count)
+// Читаем из полученных данных Ru - расчетное сопротивление стали по временному сопротивлению
+unsigned int design_steel_resistance(WINDOW *sub1, const steel *info, int count)
 {
-    int first_r_u = 0;
-    int second_r_u = 0;
-    int r_u;
+    unsigned int first_r_u = 0;
+    unsigned int second_r_u = 0;
+    unsigned int r_u;
 
     for (int i = 0; i < count; i++)
     {
@@ -373,20 +373,29 @@ int design_steel_resistance(WINDOW *sub1, const steel *info, int count)
         {
             first_r_u = info[i].r_u;
             wmove(sub1, 8, 15);
-            //wprintw(sub1, "first = %d N/mm^2", first_r_u);
         }
         if (info[i].steel_name == 355 && package_info[3] >= (int) info[i].thickness_1
             && package_info[3] <= (int) info[i].thickness_2)
         {
             second_r_u = info[i].r_u;
             wmove(sub1, 9, 15);
-            //wprintw(sub1, "second = %d N/mm^2", second_r_u);
         }
     }
     r_u = (first_r_u < second_r_u) ? first_r_u : second_r_u;
-    //wmove(sub1, 10, 15);
-    //wprintw(sub1, "Ru = %d N/mm^2", r_u);
     return r_u;
+}
+
+// Читаем из полученных данных Rbs - расчетное сопротивление срезу
+unsigned int design_bolt_resistance(const bolt *info, int count)
+{
+    unsigned int r_bs;
+
+    for (int i = 0; i < count; i++)
+    {
+        if (info[i].class == 8.8)
+            r_bs = info[i].r_bs;
+    }
+    return r_bs;
 }
 
 // Рисуем таблицу
@@ -490,7 +499,7 @@ void draw_table(WINDOW *sub1)
 }
 
 // Заполняем таблицу
-void data_draw_table(WINDOW *sub1, int r_u)
+void data_draw_table(WINDOW *sub1, unsigned int r_u, unsigned int r_bs)
 {
     /* Заполнение 1 столбца */
     wmove(sub1, 9, 3);
@@ -503,7 +512,7 @@ void data_draw_table(WINDOW *sub1, int r_u)
     wmove(sub1, 9, 20);
     wprintw(sub1, "Ru");
     wmove(sub1, 11, 17);
-    wprintw(sub1, "%d N/mm^2", r_u);
+    wprintw(sub1, "%u N/mm^2", r_u);
     wmove(sub1, 13, 21);
     waddch(sub1, ACS_HLINE);
     /* Заполнение Rbp */
@@ -519,5 +528,5 @@ void data_draw_table(WINDOW *sub1, int r_u)
     wmove(sub1, 11, 49);
     waddch(sub1, ACS_HLINE);
     wmove(sub1, 13, 45);
-    wprintw(sub1, "451 N/mm^2");
+    wprintw(sub1, "%u N/mm^2", r_bs);
 }

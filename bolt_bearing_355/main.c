@@ -17,7 +17,7 @@ int main(void)
     WINDOW *sub1, *a, *b;
     int maxx, maxy, halfx, halfy;
     steel *info_st = (steel *) malloc(SIZE_STEEL * sizeof(steel));
-    bolt *info_blt = (bolt *) malloc(SIZE_BOLT * sizeof (bolt));
+    bolt *info_blt = (bolt *) malloc(SIZE_BOLT * sizeof(bolt));
     if (!info_st || !info_blt)
         printf("Error while allocating memory!\n");
     FILE *fptr_st;
@@ -26,8 +26,8 @@ int main(void)
     char file_name_blt[] = "tabl_G_5.csv";
     int count_st;    // количество строк в файле tabl_B_3.csv
     int count_blt;   // количество строк в файле tabl_G_5.csv
-    int r_u;
-    int r_bs;
+    unsigned int r_u;
+    unsigned int r_bs;
 
     initscr();
 
@@ -88,13 +88,13 @@ int main(void)
 
     // 2. Читаем из полученных данных Ru и Rbs
     r_u = design_steel_resistance(sub1, info_st, count_st);
-    // r_bs
+    r_bs = design_bolt_resistance(info_blt, count_blt);
 
     // 3. Рисуем таблицу под данные из файлов
     draw_table(sub1);
 
     // 4. Заполняем данными таблицу
-    data_draw_table(sub1, r_u);
+    data_draw_table(sub1, r_u, r_bs);
 
 
     wrefresh(sub1);

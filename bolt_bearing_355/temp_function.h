@@ -68,8 +68,11 @@ void first_part_block(WINDOW *b, int position);
 // Блок второй детали
 void second_part_block(WINDOW *b, int position);
 
-// Читаем из полученных данных расчетное сопротивление стали
-int design_steel_resistance(WINDOW *sub1, const steel *info, int count);
+// Читаем из полученных данных Ru - расчетное сопротивление стали по временному сопротивлению
+unsigned int design_steel_resistance(WINDOW *sub1, const steel *info, int count);
+
+// Читаем из полученных данных Rbs - расчетное сопротивление срезу
+unsigned int design_bolt_resistance(const bolt *info, int count);
 
 // Ввод толщин соединяемых деталей
 void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch,
@@ -79,6 +82,6 @@ void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch
 void draw_table(WINDOW *sub1);
 
 // Заполняем таблицу
-void data_draw_table(WINDOW *sub1, int r_u);
+void data_draw_table(WINDOW *sub1, unsigned int r_u, unsigned int r_bs);
 
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H
