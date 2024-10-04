@@ -94,7 +94,7 @@ int main(void)
     draw_table(sub1);
 
     // 4. Заполняем данными таблицу
-    data_draw_table(sub1, r_u, r_bs);
+    data_draw_table(sub1, r_u);
 
 
     wrefresh(sub1);

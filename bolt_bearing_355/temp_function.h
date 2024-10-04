@@ -82,6 +82,6 @@ void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch
 void draw_table(WINDOW *sub1);
 
 // Заполняем таблицу
-void data_draw_table(WINDOW *sub1, unsigned int r_u, unsigned int r_bs);
+void data_draw_table(WINDOW *sub1, unsigned int r_u);
 
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H

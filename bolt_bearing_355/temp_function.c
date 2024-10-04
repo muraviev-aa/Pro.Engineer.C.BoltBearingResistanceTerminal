@@ -370,16 +370,10 @@ unsigned int design_steel_resistance(WINDOW *sub1, const steel *info, int count)
     {
         if (info[i].steel_name == 355 && package_info[2] >= (int) info[i].thickness_1
             && package_info[2] <= (int) info[i].thickness_2)
-        {
             first_r_u = info[i].r_u;
-            wmove(sub1, 8, 15);
-        }
         if (info[i].steel_name == 355 && package_info[3] >= (int) info[i].thickness_1
             && package_info[3] <= (int) info[i].thickness_2)
-        {
             second_r_u = info[i].r_u;
-            wmove(sub1, 9, 15);
-        }
     }
     r_u = (first_r_u < second_r_u) ? first_r_u : second_r_u;
     return r_u;
@@ -467,15 +461,15 @@ void draw_table(WINDOW *sub1)
 
     // 3-я горизонтальная линия
     wmove(sub1, 12, 1);
-    waddch(sub1, ACS_LTEE); // левый разделитель
+    waddch(sub1, ACS_LLCORNER); // левый разделитель
     wmove(sub1, 12, 56);
-    waddch(sub1, ACS_RTEE); // правый разделитель
+    waddch(sub1, ACS_LRCORNER); // правый разделитель
     wmove(sub1, 12, 14);
-    waddch(sub1, ACS_PLUS); // первый крест
+    waddch(sub1, ACS_BTEE); // первый крест
     wmove(sub1, 12, 28);
-    waddch(sub1, ACS_PLUS); // второй крест
+    waddch(sub1, ACS_BTEE); // второй крест
     wmove(sub1, 12, 42);
-    waddch(sub1, ACS_PLUS); // третий крест
+    waddch(sub1, ACS_BTEE); // третий крест
     for (int i = 2; i < 14; i++)
     {
         wmove(sub1, 12, i);
@@ -499,7 +493,7 @@ void draw_table(WINDOW *sub1)
 }
 
 // Заполняем таблицу
-void data_draw_table(WINDOW *sub1, unsigned int r_u, unsigned int r_bs)
+void data_draw_table(WINDOW *sub1, unsigned int r_u)
 {
     /* Заполнение 1 столбца */
     wmove(sub1, 9, 3);
@@ -522,11 +516,9 @@ void data_draw_table(WINDOW *sub1, unsigned int r_u, unsigned int r_bs)
     wprintw(sub1, "%.f N/mm^2", (double) r_u * 1.35);
     wmove(sub1, 13, 35);
     waddch(sub1, ACS_HLINE);
-    /* Заполнение Rbt */
+    /* Заполнение Run */
     wmove(sub1, 9, 48);
-    wprintw(sub1, "Rbt");
-    wmove(sub1, 11, 49);
-    waddch(sub1, ACS_HLINE);
-    wmove(sub1, 13, 45);
-    wprintw(sub1, "%u N/mm^2", r_bs);
+    wprintw(sub1, "Run");
+    wmove(sub1, 11, 46);
+    wprintw(sub1, "in work");
 }
