@@ -19,6 +19,7 @@ int open_file(WINDOW *name, FILE **fptr, char *name_file, int position)
     return 0;
 }
 
+// Читаем файл c данными по стали
 int read_data_file_steel(FILE **fptr, steel info[])
 {
     unsigned int steel_name, r_yn, r_un, r_y, r_u;
@@ -33,6 +34,20 @@ int read_data_file_steel(FILE **fptr, steel info[])
     return count;
 }
 
+// Читаем файл c данными по расч. сопротивлению сминаемых элементов
+int read_data_file_steel_elem(FILE **fptr_st_el, steel_elem info_st_el[])
+{
+    unsigned int r_un, r_bp_a, r_bp_b;
+    int count = 0;
+    while (fscanf(*fptr_st_el, "%d;%d;%d", &r_un, &r_bp_a, &r_bp_b) > 0)
+    {
+        add_record_steel_elem(info_st_el, count, r_un, r_bp_a, r_bp_b);
+        count++;
+    }
+    return count;
+}
+
+// Читаем файл c данными по болтам
 int read_data_file_bolt(FILE **fptr, bolt info[])
 {
     double class;
@@ -47,6 +62,7 @@ int read_data_file_bolt(FILE **fptr, bolt info[])
     return count;
 }
 
+// Добавляем запись прочностных характеристик стали
 void add_record_steel(steel info[], int number, unsigned int steel_name, double thickness_1, double thickness_2,
                       unsigned int r_yn, unsigned int r_un, unsigned int r_y, unsigned int r_u)
 {
@@ -59,6 +75,15 @@ void add_record_steel(steel info[], int number, unsigned int steel_name, double 
     info[number].r_u = r_u;
 }
 
+// Добавляем запись прочностных характеристик сминаемых элементов
+void add_record_steel_elem(steel_elem info[], int number, unsigned int r_un, unsigned int r_bp_a, unsigned int r_bp_b)
+{
+    info[number].r_un = r_un;
+    info[number].r_bp_a = r_bp_a;
+    info[number].r_bp_b = r_bp_b;
+}
+
+// Добавляем запись прочностных характеристик болтов
 void add_record_bolt(bolt info[], int number, double class, unsigned int r_bun, unsigned int r_byn,
                      unsigned int r_bs, unsigned int r_bt)
 {
@@ -360,7 +385,7 @@ void delete_char(WINDOW *w, int row, int column, int count_ch)
 }
 
 // Читаем из полученных данных Ru - расчетное сопротивление стали по временному сопротивлению
-unsigned int design_steel_resistance(WINDOW *sub1, const steel *info, int count)
+unsigned int design_steel_resistance_r_u(const steel *info, int count)
 {
     unsigned int first_r_u = 0;
     unsigned int second_r_u = 0;
@@ -379,8 +404,40 @@ unsigned int design_steel_resistance(WINDOW *sub1, const steel *info, int count)
     return r_u;
 }
 
+// Читаем из полученных данных Run - временное сопротивление стали
+unsigned int design_steel_resistance_r_un(const steel *info, int count)
+{
+    unsigned int first_r_un = 0;
+    unsigned int second_r_un = 0;
+    unsigned int r_un;
+
+    for (int i = 0; i < count; i++)
+    {
+        if (info[i].steel_name == 355 && package_info[2] >= (int) info[i].thickness_1
+            && package_info[2] <= (int) info[i].thickness_2)
+            first_r_un = info[i].r_un;
+        if (info[i].steel_name == 355 && package_info[3] >= (int) info[i].thickness_1
+            && package_info[3] <= (int) info[i].thickness_2)
+            second_r_un = info[i].r_un;
+    }
+    r_un = (first_r_un < second_r_un) ? first_r_un : second_r_un;
+    return r_un;
+}
+
+// Читаем из полученных данных Rbp - расчетное сопротивление смятию одноболтового соединения
+unsigned int design_steel_resistance_r_bp(const steel_elem *info_st_el, int count, unsigned int r_un)
+{
+    unsigned int r_bp;
+    for (int i = 0; i < count; i++)
+    {
+        if (info_st_el[i].r_un == r_un)
+            r_bp = info_st_el[i].r_bp_b;
+    }
+    return r_bp;
+}
+
 // Читаем из полученных данных Rbs - расчетное сопротивление срезу
-unsigned int design_bolt_resistance(const bolt *info, int count)
+unsigned int design_bolt_resistance_r_bs(const bolt *info, int count)
 {
     unsigned int r_bs;
 
@@ -493,7 +550,7 @@ void draw_table(WINDOW *sub1)
 }
 
 // Заполняем таблицу
-void data_draw_table(WINDOW *sub1, unsigned int r_u)
+void data_draw_table(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, unsigned int r_un)
 {
     /* Заполнение 1 столбца */
     wmove(sub1, 9, 3);
@@ -513,12 +570,12 @@ void data_draw_table(WINDOW *sub1, unsigned int r_u)
     wmove(sub1, 9, 34);
     wprintw(sub1, "Rbp");
     wmove(sub1, 11, 31);
-    wprintw(sub1, "%.f N/mm^2", (double) r_u * 1.35);
+    wprintw(sub1, "%u N/mm^2", r_bp);
     wmove(sub1, 13, 35);
     waddch(sub1, ACS_HLINE);
     /* Заполнение Run */
     wmove(sub1, 9, 48);
     wprintw(sub1, "Run");
-    wmove(sub1, 11, 46);
-    wprintw(sub1, "in work");
+    wmove(sub1, 11, 45);
+    wprintw(sub1, "%u N/mm^2", r_un);
 }

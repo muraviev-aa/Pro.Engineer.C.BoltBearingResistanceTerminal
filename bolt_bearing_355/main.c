@@ -2,8 +2,9 @@
 #include "temp_function.h"
 #include <stdio.h>
 
-#define SIZE_STEEL 15      // число строк в файле tabl_B_3.csv
-#define SIZE_BOLT 5        // число строк в файле tabl_G_5.csv
+#define SIZE_STEEL 15           // число строк в файле tabl_B_3.csv
+#define SIZE_STEEL_ELEM 15      // число строк в файле tabl_G_6.csv
+#define SIZE_BOLT 5             // число строк в файле tabl_G_5.csv
 #define USER 100
 #define USER1 101
 #define USER2 102
@@ -17,17 +18,23 @@ int main(void)
     WINDOW *sub1, *a, *b;
     int maxx, maxy, halfx, halfy;
     steel *info_st = (steel *) malloc(SIZE_STEEL * sizeof(steel));
+    steel_elem *info_st_el = (steel_elem *) malloc(SIZE_STEEL_ELEM * sizeof(steel_elem));
     bolt *info_blt = (bolt *) malloc(SIZE_BOLT * sizeof(bolt));
-    if (!info_st || !info_blt)
+    if (!info_st || !info_blt || !info_st_el)
         printf("Error while allocating memory!\n");
     FILE *fptr_st;
+    FILE *fptr_st_el;
     FILE *fptr_blt;
     char file_name_st[] = "tabl_B_3.csv";
+    char file_name_st_el[] = "tabl_G_6.csv";
     char file_name_blt[] = "tabl_G_5.csv";
     int count_st;    // количество строк в файле tabl_B_3.csv
+    int count_st_el; // количество строк в файле tabl_G_6.csv
     int count_blt;   // количество строк в файле tabl_G_5.csv
     unsigned int r_u;
     unsigned int r_bs;
+    unsigned int r_un;
+    unsigned int r_bp;
 
     initscr();
 
@@ -81,20 +88,25 @@ int main(void)
     open_file(sub1, &fptr_blt, file_name_blt, 15);
     count_blt = read_data_file_bolt(&fptr_blt, info_blt);
     fclose(fptr_blt);
-
+    /* tabl_G_6.csv - расчетные сопротивления смятию элементов */
+    open_file(sub1, &fptr_st_el, file_name_st_el, 20);
+    count_st_el = read_data_file_steel_elem(&fptr_st_el, info_st_el);
+    fclose(fptr_st_el);
 
     // 1. Вводим исходные данные
     data_entry_dialog(sub1, a, b);
 
     // 2. Читаем из полученных данных Ru и Rbs
-    r_u = design_steel_resistance(sub1, info_st, count_st);
-    r_bs = design_bolt_resistance(info_blt, count_blt);
+    r_u = design_steel_resistance_r_u(info_st, count_st);
+    r_un = design_steel_resistance_r_un(info_st, count_st);
+    r_bp = design_steel_resistance_r_bp(info_st_el, count_st_el, r_un);
+    r_bs = design_bolt_resistance_r_bs(info_blt, count_blt);
 
     // 3. Рисуем таблицу под данные из файлов
     draw_table(sub1);
 
     // 4. Заполняем данными таблицу
-    data_draw_table(sub1, r_u);
+    data_draw_table(sub1, r_u, r_bp, r_un);
 
 
     wrefresh(sub1);
