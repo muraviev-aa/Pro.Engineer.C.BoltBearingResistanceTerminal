@@ -449,133 +449,170 @@ unsigned int design_bolt_resistance_r_bs(const bolt *info, int count)
     return r_bs;
 }
 
+// Читаем из полученных данных Rbt - расчетное сопротивление растяжению
+unsigned int design_bolt_resistance_r_bt(const bolt *info, int count)
+{
+    unsigned int r_bt;
+
+    for (int i = 0; i < count; i++)
+    {
+        if (info[i].class == 8.8)
+            r_bt = info[i].r_bt;
+    }
+    return r_bt;
+}
+
 // Рисуем таблицу
-void draw_table(WINDOW *sub1)
+void draw_table(WINDOW *sub1, int num)
 {
     // 1-я горизонтальная линия
-    wmove(sub1, 8, 1);
+    wmove(sub1, num, 1);
     waddch(sub1, ACS_ULCORNER); // верхний левый угол
-    wmove(sub1, 8, 56);
+    wmove(sub1, num, 56);
     waddch(sub1, ACS_URCORNER); // верхний правый угол
-    wmove(sub1, 8, 14);
+    wmove(sub1, num, 14);
     waddch(sub1, ACS_TTEE);     // начало 1-ой разделит. линии
-    wmove(sub1, 8, 28);
+    wmove(sub1, num, 28);
     waddch(sub1, ACS_TTEE);     // начало 2-ой разделит. линии
-    wmove(sub1, 8, 42);
+    wmove(sub1, num, 42);
     waddch(sub1, ACS_TTEE);     // начало 3-ей разделит. линии
     for (int i = 2; i < 14; i++)
     {
-        wmove(sub1, 8, i);
+        wmove(sub1, num, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
     for (int i = 15; i < 28; i++)
     {
-        wmove(sub1, 8, i);
+        wmove(sub1, num, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
     for (int i = 29; i < 42; i++)
     {
-        wmove(sub1, 8, i);
+        wmove(sub1, num, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
     for (int i = 43; i < 56; i++)
     {
-        wmove(sub1, 8, i);
+        wmove(sub1, num, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
 
     // 2-я горизонтальная линия
-    wmove(sub1, 10, 1);
+    wmove(sub1, num + 2, 1);
     waddch(sub1, ACS_LTEE); // левый разделитель
-    wmove(sub1, 10, 56);
+    wmove(sub1, num + 2, 56);
     waddch(sub1, ACS_RTEE); // правый разделитель
-    wmove(sub1, 10, 14);
+    wmove(sub1, num + 2, 14);
     waddch(sub1, ACS_PLUS); // первый крест
-    wmove(sub1, 10, 28);
+    wmove(sub1, num + 2, 28);
     waddch(sub1, ACS_PLUS); // второй крест
-    wmove(sub1, 10, 42);
+    wmove(sub1, num + 2, 42);
     waddch(sub1, ACS_PLUS); // третий крест
     for (int i = 2; i < 14; i++)
     {
-        wmove(sub1, 10, i);
+        wmove(sub1, num + 2, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
     for (int i = 15; i < 28; i++)
     {
-        wmove(sub1, 10, i);
+        wmove(sub1, num + 2, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
     for (int i = 29; i < 42; i++)
     {
-        wmove(sub1, 10, i);
+        wmove(sub1, num + 2, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
     for (int i = 43; i < 56; i++)
     {
-        wmove(sub1, 10, i);
+        wmove(sub1, num + 2, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
 
     // 3-я горизонтальная линия
-    wmove(sub1, 12, 1);
+    wmove(sub1, num + 4, 1);
     waddch(sub1, ACS_LLCORNER); // левый разделитель
-    wmove(sub1, 12, 56);
+    wmove(sub1, num + 4, 56);
     waddch(sub1, ACS_LRCORNER); // правый разделитель
-    wmove(sub1, 12, 14);
+    wmove(sub1, num + 4, 14);
     waddch(sub1, ACS_BTEE); // первый крест
-    wmove(sub1, 12, 28);
+    wmove(sub1, num + 4, 28);
     waddch(sub1, ACS_BTEE); // второй крест
-    wmove(sub1, 12, 42);
+    wmove(sub1, num + 4, 42);
     waddch(sub1, ACS_BTEE); // третий крест
     for (int i = 2; i < 14; i++)
     {
-        wmove(sub1, 12, i);
+        wmove(sub1, num + 4, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
     for (int i = 15; i < 28; i++)
     {
-        wmove(sub1, 12, i);
+        wmove(sub1, num + 4, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
     for (int i = 29; i < 42; i++)
     {
-        wmove(sub1, 12, i);
+        wmove(sub1, num + 4, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
     for (int i = 43; i < 56; i++)
     {
-        wmove(sub1, 12, i);
+        wmove(sub1, num + 4, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
 }
 
-// Заполняем таблицу
-void data_draw_table(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, unsigned int r_un)
+// Заполняем таблицу характеристиками стали
+void data_draw_table_steel(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, unsigned int r_un, int num)
 {
+    /* Название таблицы */
+    wmove(sub1, num, 6);
+    wprintw(sub1, "Table 1 - Strength characteristics of steel");
     /* Заполнение 1 столбца */
-    wmove(sub1, 9, 3);
+    wmove(sub1, num + 2, 3);
     wprintw(sub1, "Data  name");
-    wmove(sub1, 11, 6);
+    wmove(sub1, num + 4, 6);
     wprintw(sub1, "C355");
-    wmove(sub1, 13, 3);
-    wprintw(sub1, "bolt 8.8;B");
     /* Заполнение Ru */
-    wmove(sub1, 9, 20);
+    wmove(sub1, num + 2, 20);
     wprintw(sub1, "Ru");
-    wmove(sub1, 11, 17);
+    wmove(sub1, num + 4, 17);
     wprintw(sub1, "%u N/mm^2", r_u);
-    wmove(sub1, 13, 21);
-    waddch(sub1, ACS_HLINE);
     /* Заполнение Rbp */
-    wmove(sub1, 9, 34);
+    wmove(sub1, num + 2, 34);
     wprintw(sub1, "Rbp");
-    wmove(sub1, 11, 31);
+    wmove(sub1, num + 4, 31);
     wprintw(sub1, "%u N/mm^2", r_bp);
-    wmove(sub1, 13, 35);
-    waddch(sub1, ACS_HLINE);
     /* Заполнение Run */
-    wmove(sub1, 9, 48);
+    wmove(sub1, num + 2, 48);
     wprintw(sub1, "Run");
-    wmove(sub1, 11, 45);
+    wmove(sub1, num + 4, 45);
     wprintw(sub1, "%u N/mm^2", r_un);
+}
+
+// Заполняем таблицу характеристиками болта
+void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, int num)
+{
+    wmove(sub1, 15, 13);
+    wprintw(sub1, "Table 2 - Bolt characteristics");
+    /* Заполнение 1 столбца */
+    wmove(sub1, num + 2, 6);
+    wprintw(sub1, "Ab");
+    //wmove(sub1, num + 4, 6);
+    //wprintw(sub1, "C355");
+    /* Заполнение Ru */
+    wmove(sub1, num + 2, 20);
+    wprintw(sub1, "Abn");
+    //wmove(sub1, num + 4, 17);
+    //wprintw(sub1, "%u N/mm^2", r_u);
+    /* Заполнение Rbp */
+    wmove(sub1, num + 2, 34);
+    wprintw(sub1, "Rbs");
+    wmove(sub1, num + 4, 31);
+    wprintw(sub1, "%u N/mm^2", r_bs);
+    /* Заполнение Run */
+    wmove(sub1, num + 2, 48);
+    wprintw(sub1, "Rbt");
+    wmove(sub1, num + 4, 45);
+    wprintw(sub1, "%u N/mm^2", r_bt);
 }

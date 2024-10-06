@@ -22,19 +22,14 @@ int main(void)
     bolt *info_blt = (bolt *) malloc(SIZE_BOLT * sizeof(bolt));
     if (!info_st || !info_blt || !info_st_el)
         printf("Error while allocating memory!\n");
-    FILE *fptr_st;
-    FILE *fptr_st_el;
-    FILE *fptr_blt;
+    FILE *fptr_st, *fptr_st_el, *fptr_blt;
     char file_name_st[] = "tabl_B_3.csv";
     char file_name_st_el[] = "tabl_G_6.csv";
     char file_name_blt[] = "tabl_G_5.csv";
     int count_st;    // количество строк в файле tabl_B_3.csv
     int count_st_el; // количество строк в файле tabl_G_6.csv
     int count_blt;   // количество строк в файле tabl_G_5.csv
-    unsigned int r_u;
-    unsigned int r_bs;
-    unsigned int r_un;
-    unsigned int r_bp;
+    unsigned int r_u, r_bs, r_un, r_bp, r_bt;
 
     initscr();
 
@@ -96,17 +91,22 @@ int main(void)
     // 1. Вводим исходные данные
     data_entry_dialog(sub1, a, b);
 
-    // 2. Читаем из полученных данных Ru и Rbs
+    // 2. Читаем из полученных данных нужную информацию
     r_u = design_steel_resistance_r_u(info_st, count_st);
     r_un = design_steel_resistance_r_un(info_st, count_st);
     r_bp = design_steel_resistance_r_bp(info_st_el, count_st_el, r_un);
     r_bs = design_bolt_resistance_r_bs(info_blt, count_blt);
+    r_bt = design_bolt_resistance_r_bt(info_blt, count_blt);
 
-    // 3. Рисуем таблицу под данные из файлов
-    draw_table(sub1);
+    // 3. Рисуем таблицу под данные из файлов для стали
+    draw_table(sub1, 9);
 
-    // 4. Заполняем данными таблицу
-    data_draw_table(sub1, r_u, r_bp, r_un);
+    // 4. Рисуем таблицу под данные из файлов для болтов
+    draw_table(sub1, 16);
+
+    // 5. Заполняем данными таблицу
+    data_draw_table_steel(sub1, r_u, r_bp, r_un, 8);
+    data_draw_table_bolt(sub1, r_bs, r_bt, 15);
 
 
     wrefresh(sub1);
@@ -115,6 +115,12 @@ int main(void)
     refresh();
 
     getch();
+
+    // Освобождаем память
+    free(info_st);
+    free(info_st_el);
+    free(info_blt);
+
     endwin();
     return 0;
 }

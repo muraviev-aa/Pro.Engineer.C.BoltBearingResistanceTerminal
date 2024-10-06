@@ -94,14 +94,20 @@ unsigned int design_steel_resistance_r_bp(const steel_elem *info_st_el, int coun
 // Читаем из полученных данных Rbs - расчетное сопротивление срезу
 unsigned int design_bolt_resistance_r_bs(const bolt *info, int count);
 
+// Читаем из полученных данных Rbt - расчетное сопротивление растяжению
+unsigned int design_bolt_resistance_r_bt(const bolt *info, int count);
+
 // Ввод толщин соединяемых деталей
 void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch,
                       const char *text_1, const char *text_2);
 
 // Рисуем таблицу
-void draw_table(WINDOW *sub1);
+void draw_table(WINDOW *sub1, int num);
 
-// Заполняем таблицу
-void data_draw_table(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, unsigned int r_un);
+// Заполняем таблицу характеристиками стали
+void data_draw_table_steel(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, unsigned int r_un, int num);
+
+// Заполняем таблицу характеристиками болта
+void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, int num);
 
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H
