@@ -30,6 +30,7 @@ int main(void)
     int count_st_el; // количество строк в файле tabl_G_6.csv
     int count_blt;   // количество строк в файле tabl_G_5.csv
     unsigned int r_u, r_bs, r_un, r_bp, r_bt;
+    int max_bear_result;
 
     initscr();
 
@@ -108,6 +109,10 @@ int main(void)
     data_draw_table_steel(sub1, r_u, r_bp, r_un, 8);
     data_draw_table_bolt(sub1, r_bs, r_bt, 15);
 
+    // 6. Расчет на смятие
+    max_bear_result = calc_bearing_n_bp(r_bp);
+    wmove(sub1, 22, 5);
+    wprintw(sub1, "Max bearing force %d N = %.2f T", max_bear_result, max_bear_result * 0.0001);
 
     wrefresh(sub1);
     wrefresh(a);

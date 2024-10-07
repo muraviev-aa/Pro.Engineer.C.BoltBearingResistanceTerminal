@@ -616,3 +616,16 @@ void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, in
     wmove(sub1, num + 4, 45);
     wprintw(sub1, "%u N/mm^2", r_bt);
 }
+
+// Расчет на смятие / максимальное усилие на смятие
+int calc_bearing_n_bp(unsigned int r_bp)
+{
+    int thick_part_result;
+
+    if (package_info[2] <= package_info[3])
+        thick_part_result = package_info[2];
+    else
+        thick_part_result = package_info[3];
+
+    return (int)r_bp * package_info[0] * thick_part_result;
+}
