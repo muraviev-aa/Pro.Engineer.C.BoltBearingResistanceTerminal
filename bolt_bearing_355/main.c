@@ -111,8 +111,20 @@ int main(void)
 
     // 6. Расчет на смятие
     max_bear_result = calc_bearing_n_bp(r_bp);
-    wmove(sub1, 22, 5);
-    wprintw(sub1, "Max bearing force %d N = %.2f T", max_bear_result, max_bear_result * 0.0001);
+    wmove(sub1, 22, 12);
+    wprintw(sub1, "Result for one bolt:");
+    wmove(sub1, 23, 4);
+    waddch(sub1, ACS_DIAMOND);
+    wmove(sub1, 23, 6);
+    wprintw(sub1, "Max. shear force: ");
+    wmove(sub1, 24, 4);
+    waddch(sub1, ACS_DIAMOND);
+    wmove(sub1, 24, 6);
+    wprintw(sub1, "Max. bearing force: %d N = %.2f T", max_bear_result, max_bear_result * 0.0001);
+    wmove(sub1, 25, 4);
+    waddch(sub1, ACS_DIAMOND);
+    wmove(sub1, 25, 6);
+    wprintw(sub1, "Max. tensile force: ");
 
     wrefresh(sub1);
     wrefresh(a);
