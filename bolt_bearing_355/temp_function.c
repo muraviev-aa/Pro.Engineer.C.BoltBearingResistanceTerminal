@@ -618,7 +618,7 @@ void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, in
 }
 
 // Расчет на смятие / максимальное усилие на смятие
-int calc_bearing_n_bp(unsigned int r_bp)
+unsigned int calc_bearing_n_bp(unsigned int r_bp)
 {
     int thick_part_result;
 
@@ -627,5 +627,5 @@ int calc_bearing_n_bp(unsigned int r_bp)
     else
         thick_part_result = package_info[3];
 
-    return (int)r_bp * package_info[0] * thick_part_result;
+    return r_bp * package_info[0] * thick_part_result;
 }

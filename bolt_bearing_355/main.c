@@ -5,6 +5,7 @@
 #define SIZE_STEEL 15           // число строк в файле tabl_B_3.csv
 #define SIZE_STEEL_ELEM 15      // число строк в файле tabl_G_6.csv
 #define SIZE_BOLT 5             // число строк в файле tabl_G_5.csv
+#define SIZE_BOLT_AREA 10        // число строк в файле tabl_G_9.csv
 #define USER 100
 #define USER1 101
 #define USER2 102
@@ -20,17 +21,19 @@ int main(void)
     steel *info_st = (steel *) malloc(SIZE_STEEL * sizeof(steel));
     steel_elem *info_st_el = (steel_elem *) malloc(SIZE_STEEL_ELEM * sizeof(steel_elem));
     bolt *info_blt = (bolt *) malloc(SIZE_BOLT * sizeof(bolt));
-    if (!info_st || !info_blt || !info_st_el)
+    bolt_area *info_blt_ar = (bolt_area *) malloc(SIZE_BOLT_AREA * sizeof(bolt_area));
+    if (!info_st || !info_blt || !info_st_el || !info_blt_ar)
         printf("Error while allocating memory!\n");
-    FILE *fptr_st, *fptr_st_el, *fptr_blt;
+    FILE *fptr_st, *fptr_st_el, *fptr_blt, *fptr_blt_ar;
     char file_name_st[] = "tabl_B_3.csv";
     char file_name_st_el[] = "tabl_G_6.csv";
     char file_name_blt[] = "tabl_G_5.csv";
-    int count_st;    // количество строк в файле tabl_B_3.csv
-    int count_st_el; // количество строк в файле tabl_G_6.csv
-    int count_blt;   // количество строк в файле tabl_G_5.csv
-    unsigned int r_u, r_bs, r_un, r_bp, r_bt;
-    int max_bear_result;
+    char file_name_blt_ar[] = "tabl_G_9.csv";
+    int count_st;      // количество строк в файле tabl_B_3.csv
+    int count_st_el;   // количество строк в файле tabl_G_6.csv
+    int count_blt;     // количество строк в файле tabl_G_5.csv
+    int count_blt_ar;  // количество строк в файле tabl_G_9.csv
+    unsigned int r_u, r_bs, r_un, r_bp, r_bt, max_bear_result, a_b, a_bn;
 
     initscr();
 
@@ -77,17 +80,19 @@ int main(void)
 
     // Работа с файлами
     /* tabl_B_3.csv - данные по стали */
-    open_file(sub1, &fptr_st, file_name_st, 10);
+    open_file(sub1, &fptr_st, file_name_st, 7);
     count_st = read_data_file_steel(&fptr_st, info_st);
     fclose(fptr_st);
     /* tabl_G_5.csv - данные по болтам */
-    open_file(sub1, &fptr_blt, file_name_blt, 15);
+    open_file(sub1, &fptr_blt, file_name_blt, 12);
     count_blt = read_data_file_bolt(&fptr_blt, info_blt);
     fclose(fptr_blt);
     /* tabl_G_6.csv - расчетные сопротивления смятию элементов */
-    open_file(sub1, &fptr_st_el, file_name_st_el, 20);
+    open_file(sub1, &fptr_st_el, file_name_st_el, 17);
     count_st_el = read_data_file_steel_elem(&fptr_st_el, info_st_el);
     fclose(fptr_st_el);
+    /* tabl_G_9.csv - площади сечения болтов */
+    open_file(sub1, &fptr_blt_ar, file_name_blt_ar, 22);
 
     // 1. Вводим исходные данные
     data_entry_dialog(sub1, a, b);

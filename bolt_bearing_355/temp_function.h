@@ -32,6 +32,13 @@ typedef struct
     unsigned int r_bt;       // Rbt
 } bolt;
 
+typedef struct
+{
+    unsigned int d;          // d
+    unsigned int a_b;        // Ab
+    unsigned int a_bn;       // Abn
+} bolt_area;
+
 /* Массив под входные данные
  * package_info[0] - диаметр болта
  * package_info[1] - количество срезов
@@ -111,6 +118,6 @@ void data_draw_table_steel(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, un
 void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, int num);
 
 // Расчет на смятие / максимальное усилие на смятие
-int calc_bearing_n_bp(unsigned int r_bp);
+unsigned int calc_bearing_n_bp(unsigned int r_bp);
 
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H
