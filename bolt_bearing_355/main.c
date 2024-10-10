@@ -33,7 +33,8 @@ int main(void)
     int count_st_el;   // количество строк в файле tabl_G_6.csv
     int count_blt;     // количество строк в файле tabl_G_5.csv
     int count_blt_ar;  // количество строк в файле tabl_G_9.csv
-    unsigned int r_u, r_bs, r_un, r_bp, r_bt, max_bear_result, a_b, a_bn;
+    unsigned int r_u, r_bs, r_un, r_bp, r_bt, max_bear_result;
+    double a_b, a_bn;
 
     initscr();
 
@@ -93,6 +94,8 @@ int main(void)
     fclose(fptr_st_el);
     /* tabl_G_9.csv - площади сечения болтов */
     open_file(sub1, &fptr_blt_ar, file_name_blt_ar, 22);
+    count_blt_ar = read_data_file_bolt_ar(&fptr_blt_ar, info_blt_ar);
+    fclose(fptr_blt_ar);
 
     // 1. Вводим исходные данные
     data_entry_dialog(sub1, a, b);
@@ -103,6 +106,7 @@ int main(void)
     r_bp = design_steel_resistance_r_bp(info_st_el, count_st_el, r_un);
     r_bs = design_bolt_resistance_r_bs(info_blt, count_blt);
     r_bt = design_bolt_resistance_r_bt(info_blt, count_blt);
+    a_b = bolt_a_b(info_blt_ar, count_blt_ar);
 
     // 3. Рисуем таблицу под данные из файлов для стали
     draw_table(sub1, 9);
@@ -112,7 +116,7 @@ int main(void)
 
     // 5. Заполняем данными таблицу
     data_draw_table_steel(sub1, r_u, r_bp, r_un, 8);
-    data_draw_table_bolt(sub1, r_bs, r_bt, 15);
+    data_draw_table_bolt(sub1, r_bs, r_bt, a_b, 15);
 
     // 6. Расчет на смятие
     max_bear_result = calc_bearing_n_bp(r_bp);
@@ -142,6 +146,7 @@ int main(void)
     free(info_st);
     free(info_st_el);
     free(info_blt);
+    free(info_blt_ar);
 
     endwin();
     return 0;

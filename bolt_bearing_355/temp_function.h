@@ -34,9 +34,9 @@ typedef struct
 
 typedef struct
 {
-    unsigned int d;          // d
-    unsigned int a_b;        // Ab
-    unsigned int a_bn;       // Abn
+    unsigned int d;    // d
+    double a_b;        // Ab
+    double a_bn;       // Abn
 } bolt_area;
 
 /* Массив под входные данные
@@ -58,6 +58,12 @@ int read_data_file_steel_elem(FILE **fptr_st_el, steel_elem info_st_el[]);
 
 // Читаем файл c данными по болтам
 int read_data_file_bolt(FILE **fptr, bolt info[]);
+
+// Читаем файл c данными по площадям болтов
+int read_data_file_bolt_ar(FILE **fptr, bolt_area info[]);
+
+// Добавляем запись площадей болтов
+void add_record_bolt_ar(bolt_area info[], int number, unsigned int d, double a_b, double a_bn);
 
 // Добавляем запись прочностных характеристик стали
 void add_record_steel(steel info[], int number, unsigned int steel_name, double thickness_1, double thickness_2,
@@ -104,6 +110,9 @@ unsigned int design_bolt_resistance_r_bs(const bolt *info, int count);
 // Читаем из полученных данных Rbt - расчетное сопротивление растяжению
 unsigned int design_bolt_resistance_r_bt(const bolt *info, int count);
 
+// Читаем из полученных данных Ab - площадь сечения болта брутто
+double bolt_a_b(const bolt_area *info, int count);
+
 // Ввод толщин соединяемых деталей
 void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch,
                       const char *text_1, const char *text_2);
@@ -115,7 +124,7 @@ void draw_table(WINDOW *sub1, int num);
 void data_draw_table_steel(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, unsigned int r_un, int num);
 
 // Заполняем таблицу характеристиками болта
-void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, int num);
+void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, double r_b, int num);
 
 // Расчет на смятие / максимальное усилие на смятие
 unsigned int calc_bearing_n_bp(unsigned int r_bp);

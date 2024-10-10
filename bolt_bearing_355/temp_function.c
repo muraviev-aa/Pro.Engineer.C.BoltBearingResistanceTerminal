@@ -48,7 +48,7 @@ int read_data_file_steel_elem(FILE **fptr_st_el, steel_elem info_st_el[])
 }
 
 // Читаем файл c данными по болтам
-int read_data_file_bolt(FILE **fptr, bolt info[])
+int read_data_file_bolt(FILE **fptr, bolt bolt[])
 {
     double class;
     unsigned int r_bun, r_byn, r_bs, r_bt;
@@ -56,10 +56,33 @@ int read_data_file_bolt(FILE **fptr, bolt info[])
     while (fscanf(*fptr, "%lf;%d;%d;%d;%d", &class, &r_bun, &r_byn,
                   &r_bs, &r_bt) > 0)
     {
-        add_record_bolt(info, count, class, r_bun, r_byn, r_bs, r_bt);
+        add_record_bolt(bolt, count, class, r_bun, r_byn, r_bs, r_bt);
         count++;
     }
     return count;
+}
+
+// Читаем файл c данными по площадям болтов
+int read_data_file_bolt_ar(FILE **fptr, bolt_area in[])
+{
+    unsigned int d;
+    double a_b;
+    double a_bn;
+    int count = 0;
+    while (fscanf(*fptr, "%d;%lf;%lf", &d, &a_b, &a_bn) > 0)
+    {
+        add_record_bolt_ar(in, count, d, a_b, a_bn);
+        count++;
+    }
+    return count;
+}
+
+// Добавляем запись площадей болтов
+void add_record_bolt_ar(bolt_area info[], int number, unsigned int d, double a_b, double a_bn)
+{
+    info[number].d = d;
+    info[number].a_b = a_b;
+    info[number].a_bn = a_bn;
 }
 
 // Добавляем запись прочностных характеристик стали
@@ -462,6 +485,19 @@ unsigned int design_bolt_resistance_r_bt(const bolt *info, int count)
     return r_bt;
 }
 
+// Читаем из полученных данных Ab - площадь сечения болта брутто
+double bolt_a_b(const bolt_area *info, int count)
+{
+    double a_b;
+
+    for (int i = 0; i < count; i++)
+    {
+        if (info[i].d == package_info[0])
+            a_b = info[i].a_b;
+    }
+    return a_b;
+}
+
 // Рисуем таблицу
 void draw_table(WINDOW *sub1, int num)
 {
@@ -591,7 +627,7 @@ void data_draw_table_steel(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, un
 }
 
 // Заполняем таблицу характеристиками болта
-void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, int num)
+void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, double r_b, int num)
 {
     wmove(sub1, 15, 13);
     wprintw(sub1, "Table 2 - Bolt characteristics");
@@ -603,8 +639,8 @@ void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, in
     /* Заполнение Ru */
     wmove(sub1, num + 2, 20);
     wprintw(sub1, "Abn");
-    //wmove(sub1, num + 4, 17);
-    //wprintw(sub1, "%u N/mm^2", r_u);
+    wmove(sub1, num + 4, 17);
+    wprintw(sub1, "%.2f sm^2", r_b);
     /* Заполнение Rbp */
     wmove(sub1, num + 2, 34);
     wprintw(sub1, "Rbs");
