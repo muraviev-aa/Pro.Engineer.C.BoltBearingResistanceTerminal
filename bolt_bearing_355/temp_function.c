@@ -498,6 +498,19 @@ double bolt_a_b(const bolt_area *info, int count)
     return a_b;
 }
 
+// Читаем из полученных данных Abn - площадь сечения болта нетто
+double bolt_a_bn(const bolt_area *info, int count)
+{
+    double a_bn;
+
+    for (int i = 0; i < count; i++)
+    {
+        if (info[i].d == package_info[0])
+            a_bn = info[i].a_bn;
+    }
+    return a_bn;
+}
+
 // Рисуем таблицу
 void draw_table(WINDOW *sub1, int num)
 {
@@ -627,30 +640,32 @@ void data_draw_table_steel(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, un
 }
 
 // Заполняем таблицу характеристиками болта
-void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, double r_b, int num)
+void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, double a_b, double a_bn, int num)
 {
     wmove(sub1, 15, 13);
     wprintw(sub1, "Table 2 - Bolt characteristics");
     /* Заполнение 1 столбца */
-    wmove(sub1, num + 2, 6);
-    wprintw(sub1, "Ab");
-    //wmove(sub1, num + 4, 6);
-    //wprintw(sub1, "C355");
-    /* Заполнение Ru */
-    wmove(sub1, num + 2, 20);
+    wmove(sub1, num + 2, 7);
     wprintw(sub1, "Abn");
+    wmove(sub1, num + 4, 4);
+    wprintw(sub1,  "%.2f sm^2", a_bn);
+    /* Заполнение Ab */
+    wmove(sub1, num + 2, 21);
+    wprintw(sub1, "Ab");
     wmove(sub1, num + 4, 17);
-    wprintw(sub1, "%.2f sm^2", r_b);
-    /* Заполнение Rbp */
+    wprintw(sub1, "%.2f sm^2", a_b);
+    /* Заполнение Rbs */
     wmove(sub1, num + 2, 34);
     wprintw(sub1, "Rbs");
     wmove(sub1, num + 4, 31);
     wprintw(sub1, "%u N/mm^2", r_bs);
-    /* Заполнение Run */
+    /* Заполнение Rbt */
     wmove(sub1, num + 2, 48);
     wprintw(sub1, "Rbt");
     wmove(sub1, num + 4, 45);
     wprintw(sub1, "%u N/mm^2", r_bt);
+    /* Заполнение Abn */
+
 }
 
 // Расчет на смятие / максимальное усилие на смятие

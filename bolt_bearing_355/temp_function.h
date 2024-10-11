@@ -113,6 +113,9 @@ unsigned int design_bolt_resistance_r_bt(const bolt *info, int count);
 // Читаем из полученных данных Ab - площадь сечения болта брутто
 double bolt_a_b(const bolt_area *info, int count);
 
+// Читаем из полученных данных Abn - площадь сечения болта нетто
+double bolt_a_bn(const bolt_area *info, int count);
+
 // Ввод толщин соединяемых деталей
 void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch,
                       const char *text_1, const char *text_2);
@@ -124,7 +127,7 @@ void draw_table(WINDOW *sub1, int num);
 void data_draw_table_steel(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, unsigned int r_un, int num);
 
 // Заполняем таблицу характеристиками болта
-void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, double r_b, int num);
+void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, double a_b, double a_bn, int num);
 
 // Расчет на смятие / максимальное усилие на смятие
 unsigned int calc_bearing_n_bp(unsigned int r_bp);

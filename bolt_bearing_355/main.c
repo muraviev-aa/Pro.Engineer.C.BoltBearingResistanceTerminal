@@ -5,7 +5,7 @@
 #define SIZE_STEEL 15           // число строк в файле tabl_B_3.csv
 #define SIZE_STEEL_ELEM 15      // число строк в файле tabl_G_6.csv
 #define SIZE_BOLT 5             // число строк в файле tabl_G_5.csv
-#define SIZE_BOLT_AREA 10        // число строк в файле tabl_G_9.csv
+#define SIZE_BOLT_AREA 10       // число строк в файле tabl_G_9.csv
 #define USER 100
 #define USER1 101
 #define USER2 102
@@ -107,6 +107,7 @@ int main(void)
     r_bs = design_bolt_resistance_r_bs(info_blt, count_blt);
     r_bt = design_bolt_resistance_r_bt(info_blt, count_blt);
     a_b = bolt_a_b(info_blt_ar, count_blt_ar);
+    a_bn = bolt_a_bn(info_blt_ar, count_blt_ar);
 
     // 3. Рисуем таблицу под данные из файлов для стали
     draw_table(sub1, 9);
@@ -116,7 +117,7 @@ int main(void)
 
     // 5. Заполняем данными таблицу
     data_draw_table_steel(sub1, r_u, r_bp, r_un, 8);
-    data_draw_table_bolt(sub1, r_bs, r_bt, a_b, 15);
+    data_draw_table_bolt(sub1, r_bs, r_bt, a_b, a_bn, 15);
 
     // 6. Расчет на смятие
     max_bear_result = calc_bearing_n_bp(r_bp);
