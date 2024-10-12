@@ -132,4 +132,7 @@ void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, do
 // Расчет на смятие / максимальное усилие на смятие
 unsigned int calc_bearing_n_bp(unsigned int r_bp);
 
+// Расчет на срез / максимальное усилие на срез
+double calc_bearing_n_bs(unsigned int r_bs, double a_b);
+
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H

@@ -170,27 +170,27 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         wmove(a, 0, 2);
         waddstr(a, "2.Enter number of slices: ");
         wgetnstr(a, info_number_slices, 1);
-        number_slices = atoi(info_number_slices);
+        package_info[1] = atoi(info_number_slices);
         wmove(a, 1, 4);
         wprintw(a, "Number of slices is %d mm. If the information is correct then press 'y', "
-                   "if incorrect press 'n' ", number_slices);
+                   "if incorrect press 'n' ", package_info[1]);
         ch = (char) wgetch(a);
         if (ch == 'n')
             delete_char(a, 1, 1, 95);
     } while (ch != 'y');
     // Вывод количества расчетных срезов одного болта
     wmove(sub1, 4, 3);
-    wprintw(sub1, "number of slices  is %d", number_slices);
+    wprintw(sub1, "number of slices  is %d", package_info[1]);
     wmove(sub1, 4, 1);
     waddch(sub1, ACS_DIAMOND);
     // Рисуем эскиз болта
-    block_bolt(b, number_slices);
+    block_bolt(b, package_info[1]);
     // Рисуем шайбы
     block_washer(b, 5);
     block_washer(b, 15);
     wrefresh(sub1);
 
-    if (number_slices == 1) // если один расчетный срез
+    if (package_info[1] == 1) // если один расчетный срез
     {
         char thick_first_1[47] = "3.Enter the thickness of the first part (mm): ";
         char thick_first_2[108] = "Thickness of the first part is %d mm. If the information "
@@ -648,7 +648,7 @@ void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, do
     wmove(sub1, num + 2, 7);
     wprintw(sub1, "Abn");
     wmove(sub1, num + 4, 4);
-    wprintw(sub1,  "%.2f sm^2", a_bn);
+    wprintw(sub1, "%.2f sm^2", a_bn);
     /* Заполнение Ab */
     wmove(sub1, num + 2, 21);
     wprintw(sub1, "Ab");
@@ -679,4 +679,10 @@ unsigned int calc_bearing_n_bp(unsigned int r_bp)
         thick_part_result = package_info[3];
 
     return r_bp * package_info[0] * thick_part_result;
+}
+
+// Расчет на срез / максимальное усилие на срез
+double calc_bearing_n_bs(unsigned int r_bs, double a_b)
+{
+    return r_bs * a_b * package_info[1];
 }
