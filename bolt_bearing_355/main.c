@@ -33,8 +33,8 @@ int main(void)
     int count_st_el;   // количество строк в файле tabl_G_6.csv
     int count_blt;     // количество строк в файле tabl_G_5.csv
     int count_blt_ar;  // количество строк в файле tabl_G_9.csv
-    unsigned int r_u, r_bs, r_un, r_bp, r_bt, max_bear_result;
-    double a_b, a_bn, max_sher_result;
+    unsigned int r_u, r_bs, r_un, r_bp, r_bt;
+    double a_b, a_bn, max_sher_result, max_bear_result, max_tens_result;
 
     initscr();
 
@@ -125,6 +125,9 @@ int main(void)
     // 7. Расчет на срез
     max_sher_result = calc_bearing_n_bs(r_bs, a_b);
 
+    // 8. Расчет на растяжение
+    max_tens_result = calc_tens_n_bt(r_bt, a_bn);
+
     /* Шапка */
     wmove(sub1, 22, 21);
     wprintw(sub1, "*One bolt*");
@@ -137,23 +140,27 @@ int main(void)
     wmove(sub1, 23, 2);
     wprintw(sub1, "Shear force: ");
     wmove(sub1, 23, 17); // один болт
-    wprintw(sub1, "%.3f kN (%.3f T)", max_sher_result * 0.001, (max_sher_result / 9.81) * 0.001);
+    wprintw(sub1, "%.2f kN (%.2f T)", max_sher_result, max_sher_result / 9.81);
     wmove(sub1, 23, 39); // многоболтовое соединение
-    wprintw(sub1, "%.3f kN (%.3f T)", max_sher_result * 0.001 * 0.9, (max_sher_result / 9.81) * 0.001 * 0.9);
+    wprintw(sub1, "%.2f kN (%.2f T)", 0.9 * max_sher_result, 0.9 * max_sher_result / 9.81);
     // Макс. сила на срез
     wmove(sub1, 24, 0);
     waddch(sub1, ACS_DIAMOND);
-    wmove(sub1, 24, 2); // один болт
+    wmove(sub1, 24, 2);
     wprintw(sub1, "Bear. force:");
-    wmove(sub1, 24, 17);
-    wprintw(sub1, "%.2f kN (%.2f T)", max_bear_result * 0.001, (max_bear_result / 9.81) * 0.001);
+    wmove(sub1, 24, 17); // один болт
+    wprintw(sub1, "%.2f kN (%.2f T)", max_bear_result, max_bear_result / 9.81);
     wmove(sub1, 24, 39); // многоболтовое соединение
-    wprintw(sub1, "%.2f kN (%.2f T)", max_bear_result * 0.001 * 0.9, (max_bear_result / 9.81) * 0.001 * 0.9);
+    wprintw(sub1, "%.2f kN (%.2f T)", 0.9 * max_bear_result, 0.9 * max_bear_result / 9.81);
     // Макс. сила на растяжение
     wmove(sub1, 25, 0);
     waddch(sub1, ACS_DIAMOND);
     wmove(sub1, 25, 2);
     wprintw(sub1, "Tens. force: ");
+    wmove(sub1, 25, 17); // один болт
+    wprintw(sub1, "%.2f kN (%.2f T)", max_tens_result, max_tens_result / 9.81);
+    wmove(sub1, 25, 39); // многоболтовое соединение
+    wprintw(sub1, "%.2f kN (%.2f T)", max_tens_result, max_tens_result / 9.81);
 
     wrefresh(sub1);
     wrefresh(a);

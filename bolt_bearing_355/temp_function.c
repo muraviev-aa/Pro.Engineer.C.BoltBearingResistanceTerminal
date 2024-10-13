@@ -668,8 +668,8 @@ void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, do
 
 }
 
-// Расчет на смятие / максимальное усилие на смятие
-unsigned int calc_bearing_n_bp(unsigned int r_bp)
+// Расчет на смятие / максимальное усилие на смятие [кН]
+double calc_bearing_n_bp(unsigned int r_bp)
 {
     int thick_part_result;
 
@@ -678,11 +678,17 @@ unsigned int calc_bearing_n_bp(unsigned int r_bp)
     else
         thick_part_result = package_info[3];
 
-    return r_bp * package_info[0] * thick_part_result;
+    return 0.001 * r_bp * package_info[0] * thick_part_result;
 }
 
-// Расчет на срез / максимальное усилие на срез
+// Расчет на срез / максимальное усилие на срез [кН]
 double calc_bearing_n_bs(unsigned int r_bs, double a_b)
 {
-    return r_bs * a_b * package_info[1];
+    return 0.1 * r_bs * a_b * package_info[1];
+}
+
+// Расчет на растяжение / максимальное усилие на растяжение [кН]
+double calc_tens_n_bt(unsigned int r_bt, double a_bn)
+{
+    return 0.1 * r_bt * a_bn;
 }
