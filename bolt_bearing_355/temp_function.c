@@ -391,8 +391,8 @@ void second_part_block(WINDOW *b, int position)
     }
     for (int i = position; i <= position + 2; i++)
     {
-        wmove(b, i, 42);
-        waddch(b, ACS_RARROW); // стрелка вправо
+        wmove(b, i, 41);
+        wprintw(b, "x");
     }
 }
 
@@ -691,4 +691,34 @@ double calc_bearing_n_bs(unsigned int r_bs, double a_b)
 double calc_tens_n_bt(unsigned int r_bt, double a_bn)
 {
     return 0.1 * r_bt * a_bn;
+}
+
+// Рисуем систему координат
+void draw_coord_sys(WINDOW *b)
+{/* Система координат */
+    // ось X
+    wmove(b, 4, 49);
+    waddch(b, ACS_HLINE);
+    wmove(b, 4, 51);
+    waddch(b, ACS_HLINE);
+    wmove(b, 4, 53);
+    waddch(b, ACS_HLINE);
+    wmove(b, 4, 55);
+    waddch(b, ACS_HLINE);
+    wmove(b, 5, 55);
+    wprintw(b, "x");
+    // ось Y
+    wmove(b, 5, 47);
+    wprintw(b, "/");
+    wmove(b, 6, 46);
+    wprintw(b, "/");
+    wmove(b, 6, 44);
+    wprintw(b, "y");
+    // ось Z
+    wmove(b, 3, 48);
+    waddch(b, ACS_VLINE);
+    wmove(b, 1, 48);
+    wprintw(b, "|");
+    wmove(b, 1, 46);
+    wprintw(b, "z");
 }

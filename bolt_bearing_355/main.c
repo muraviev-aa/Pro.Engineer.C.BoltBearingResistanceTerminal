@@ -128,12 +128,12 @@ int main(void)
     // 8. Расчет на растяжение
     max_tens_result = calc_tens_n_bt(r_bt, a_bn);
 
+    /* Вывод результатов */
     /* Шапка */
     wmove(sub1, 22, 21);
     wprintw(sub1, "*One bolt*");
-    wmove(sub1, 22, 40);
-    wprintw(sub1, "*Lots of bolts*");
-    /* Вывод результатов */
+    wmove(sub1, 22, 37);
+    wprintw(sub1, "*One bolt per group*");
     // Макс. срезающая сила
     wmove(sub1, 23, 0);
     waddch(sub1, ACS_DIAMOND);
@@ -162,6 +162,9 @@ int main(void)
     wmove(sub1, 25, 39); // многоболтовое соединение
     wprintw(sub1, "%.2f kN (%.2f T)", max_tens_result, max_tens_result / 9.81);
 
+    // n. Рисуем систему координат
+    draw_coord_sys(b);
+
     wrefresh(sub1);
     wrefresh(a);
     wrefresh(b);
@@ -178,3 +181,5 @@ int main(void)
     endwin();
     return 0;
 }
+
+

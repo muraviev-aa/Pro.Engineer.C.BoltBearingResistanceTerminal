@@ -138,4 +138,7 @@ double calc_bearing_n_bs(unsigned int r_bs, double a_b);
 // Расчет на растяжение / максимальное усилие на растяжение [кН]
 double calc_tens_n_bt(unsigned int r_bt, double a_bn);
 
+// Рисуем систему координат
+void draw_coord_sys(WINDOW *b);
+
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H
