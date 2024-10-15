@@ -22,9 +22,12 @@ int main(void)
     steel_elem *info_st_el = (steel_elem *) malloc(SIZE_STEEL_ELEM * sizeof(steel_elem));
     bolt *info_blt = (bolt *) malloc(SIZE_BOLT * sizeof(bolt));
     bolt_area *info_blt_ar = (bolt_area *) malloc(SIZE_BOLT_AREA * sizeof(bolt_area));
+
     if (!info_st || !info_blt || !info_st_el || !info_blt_ar)
         printf("Error while allocating memory!\n");
+
     FILE *fptr_st, *fptr_st_el, *fptr_blt, *fptr_blt_ar;
+
     char file_name_st[] = "tabl_B_3.csv";
     char file_name_st_el[] = "tabl_G_6.csv";
     char file_name_blt[] = "tabl_G_5.csv";
@@ -33,7 +36,7 @@ int main(void)
     int count_st_el;   // количество строк в файле tabl_G_6.csv
     int count_blt;     // количество строк в файле tabl_G_5.csv
     int count_blt_ar;  // количество строк в файле tabl_G_9.csv
-    unsigned int r_u, r_bs, r_un, r_bp, r_bt;
+    unsigned int r_u, r_bs, r_un, r_bp, r_bt, force_x, force_y;
     double a_b, a_bn, max_sher_result, max_bear_result, max_tens_result;
 
     initscr();
@@ -128,42 +131,20 @@ int main(void)
     // 8. Расчет на растяжение
     max_tens_result = calc_tens_n_bt(r_bt, a_bn);
 
-    /* Вывод результатов */
-    /* Шапка */
-    wmove(sub1, 22, 21);
-    wprintw(sub1, "*One bolt*");
-    wmove(sub1, 22, 37);
-    wprintw(sub1, "*One bolt per group*");
-    // Макс. срезающая сила
-    wmove(sub1, 23, 0);
-    waddch(sub1, ACS_DIAMOND);
-    wmove(sub1, 23, 2);
-    wprintw(sub1, "Shear force: ");
-    wmove(sub1, 23, 17); // один болт
-    wprintw(sub1, "%.2f kN (%.2f T)", max_sher_result, max_sher_result / 9.81);
-    wmove(sub1, 23, 39); // многоболтовое соединение
-    wprintw(sub1, "%.2f kN (%.2f T)", 0.9 * max_sher_result, 0.9 * max_sher_result / 9.81);
-    // Макс. сила на срез
-    wmove(sub1, 24, 0);
-    waddch(sub1, ACS_DIAMOND);
-    wmove(sub1, 24, 2);
-    wprintw(sub1, "Bear. force:");
-    wmove(sub1, 24, 17); // один болт
-    wprintw(sub1, "%.2f kN (%.2f T)", max_bear_result, max_bear_result / 9.81);
-    wmove(sub1, 24, 39); // многоболтовое соединение
-    wprintw(sub1, "%.2f kN (%.2f T)", 0.9 * max_bear_result, 0.9 * max_bear_result / 9.81);
-    // Макс. сила на растяжение
-    wmove(sub1, 25, 0);
-    waddch(sub1, ACS_DIAMOND);
-    wmove(sub1, 25, 2);
-    wprintw(sub1, "Tens. force: ");
-    wmove(sub1, 25, 17); // один болт
-    wprintw(sub1, "%.2f kN (%.2f T)", max_tens_result, max_tens_result / 9.81);
-    wmove(sub1, 25, 39); // многоболтовое соединение
-    wprintw(sub1, "%.2f kN (%.2f T)", max_tens_result, max_tens_result / 9.81);
+    // 9. Вывод результата расчета_1
+    output_results_1(sub1, max_sher_result, max_bear_result, max_tens_result);
+    wrefresh(sub1);
 
-    // n. Рисуем систему координат
-    draw_coord_sys(b);
+    // 10. Вводим силу, действующую по оси Х
+    force_x = enter_force_x(sub1, a, 3);
+
+    // 11. Вводим силу, действующую по оси Y
+    force_y = enter_force_y(sub1, a, 4);
+
+    // 12. Рисуем систему координат
+    draw_coord_sys(b, force_x, force_y);
+
+
 
     wrefresh(sub1);
     wrefresh(a);
@@ -181,5 +162,6 @@ int main(void)
     endwin();
     return 0;
 }
+
 
 

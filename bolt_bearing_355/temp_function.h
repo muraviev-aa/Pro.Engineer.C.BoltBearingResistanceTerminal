@@ -120,6 +120,12 @@ double bolt_a_bn(const bolt_area *info, int count);
 void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch,
                       const char *text_1, const char *text_2);
 
+// Ввод силы по оси X
+unsigned int enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair);
+
+// Ввод силы по оси Y
+unsigned int enter_force_y(WINDOW *sub1, WINDOW *a, int color_pair);
+
 // Рисуем таблицу
 void draw_table(WINDOW *sub1, int num);
 
@@ -139,6 +145,9 @@ double calc_bearing_n_bs(unsigned int r_bs, double a_b);
 double calc_tens_n_bt(unsigned int r_bt, double a_bn);
 
 // Рисуем систему координат
-void draw_coord_sys(WINDOW *b);
+void draw_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y);
+
+// Вывод результатов расчета_1
+void output_results_1(WINDOW *sub1, double max_sher_result, double max_bear_result, double max_tens_result);
 
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H

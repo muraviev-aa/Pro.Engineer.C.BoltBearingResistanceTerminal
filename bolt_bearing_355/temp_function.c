@@ -119,7 +119,6 @@ void add_record_bolt(bolt info[], int number, double class, unsigned int r_bun, 
 
 void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
 {
-    int number_slices;
     char info_bolt_diam[3];
     char info_number_slices[2];
     char info_thick_first_part[3];
@@ -128,9 +127,16 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     /* Пункты входных данных */
     wmove(sub1, 1, 7);
     waddstr(sub1, "Initial data:");
+    wmove(sub1, 1, 40);
+    waddstr(sub1, "Active forces:");
     for (int i = 2; i <= 6; i++)
     {
         wmove(sub1, i, 1);
+        waddch(sub1, ACS_LANTERN);
+    }
+    for (int i = 2; i <= 4; i++)
+    {
+        wmove(sub1, i, 36);
         waddch(sub1, ACS_LANTERN);
     }
     wrefresh(sub1);
@@ -263,8 +269,8 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
 }
 
 // Ввод толщин соединяемых деталей
-void
-enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch, const char *text_1, const char *text_2)
+void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch,
+                      const char *text_1, const char *text_2)
 {
     do
     {
@@ -280,6 +286,68 @@ enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch, con
         if (ch == 'n')
             delete_char(a, 1, 1, 95);
     } while (ch != 'y');
+}
+
+// Ввод силы по оси X
+unsigned int enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair)
+{
+    char info_force_x[6];
+    unsigned int force_x;
+    char ch;
+
+    do
+    {
+        wclear(a);
+        wbkgd(a, COLOR_PAIR(color_pair));
+        wmove(a, 0, 2);
+        waddstr(a, "5.Enter the X-axis force [kN]: ");
+        wgetnstr(a, info_force_x, 5);
+        force_x = atoi(info_force_x);
+        wmove(a, 1, 4);
+        wprintw(a, "X-axis force is %d kN. If the information is correct then press 'y', "
+                   "if incorrect press 'n' ", force_x);
+        ch = (char) wgetch(a);
+        if (ch == 'n')
+            delete_char(a, 1, 1, 95);
+    } while (ch != 'y');
+    // Вывод значения силы, действующей по оси Х
+    wmove(sub1, 2, 36);
+    waddch(sub1, ACS_DIAMOND);
+    wmove(sub1, 2, 38);
+    wprintw(sub1, "X force is %d kN", force_x);
+    wrefresh(sub1);
+    return force_x;
+}
+
+// Ввод силы по оси Y
+unsigned int enter_force_y(WINDOW *sub1, WINDOW *a, int color_pair)
+{
+    char info_force_y[6];
+    unsigned int force_y;
+    char ch;
+
+    do
+    {
+        wclear(a);
+        wbkgd(a, COLOR_PAIR(color_pair));
+        wmove(a, 0, 2);
+        waddstr(a, "5.Enter the Y-axis force [kN]: ");
+        wgetnstr(a, info_force_y, 5);
+        force_y = atoi(info_force_y);
+        wmove(a, 1, 4);
+        wprintw(a, "Y-axis force is %d kN. If the information is correct then press 'y', "
+                   "if incorrect press 'n' ", force_y);
+        ch = (char) wgetch(a);
+        if (ch == 'n')
+            delete_char(a, 1, 1, 95);
+    } while (ch != 'y');
+    // Вывод значения силы, действующей по оси Х
+    wmove(sub1, 3, 36);
+    waddch(sub1, ACS_DIAMOND);
+    wmove(sub1, 3, 38);
+    wprintw(sub1, "Y force is %d kN", force_y);
+    wrefresh(sub1);
+    return force_y;
 }
 
 /* Блок болта */
@@ -694,7 +762,7 @@ double calc_tens_n_bt(unsigned int r_bt, double a_bn)
 }
 
 // Рисуем систему координат
-void draw_coord_sys(WINDOW *b)
+void draw_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y)
 {/* Система координат */
     // ось X
     wmove(b, 4, 49);
@@ -707,6 +775,8 @@ void draw_coord_sys(WINDOW *b)
     waddch(b, ACS_HLINE);
     wmove(b, 5, 55);
     wprintw(b, "x");
+    wmove(b, 6, 49);
+    wprintw(b, "%d kN", force_x);
     // ось Y
     wmove(b, 5, 47);
     wprintw(b, "/");
@@ -714,6 +784,8 @@ void draw_coord_sys(WINDOW *b)
     wprintw(b, "/");
     wmove(b, 6, 44);
     wprintw(b, "y");
+    wmove(b, 5, 38);
+    wprintw(b, "%d kN", force_y);
     // ось Z
     wmove(b, 3, 48);
     waddch(b, ACS_VLINE);
@@ -721,4 +793,43 @@ void draw_coord_sys(WINDOW *b)
     wprintw(b, "|");
     wmove(b, 1, 46);
     wprintw(b, "z");
+    // Обновить b
+    wrefresh(b);
+}
+
+// Вывод результатов расчета_1
+void output_results_1(WINDOW *sub1, double max_sher_result, double max_bear_result, double max_tens_result)
+{
+    /* Шапка */
+    wmove(sub1, 22, 21);
+    wprintw(sub1, "*One bolt*");
+    wmove(sub1, 22, 37);
+    wprintw(sub1, "*One bolt per group*");
+    // Макс. срезающая сила
+    wmove(sub1, 23, 0);
+    waddch(sub1, ACS_DIAMOND);
+    wmove(sub1, 23, 2);
+    wprintw(sub1, "Shear force: ");
+    wmove(sub1, 23, 17); // один болт
+    wprintw(sub1, "%.2f kN (%.2f T)", max_sher_result, max_sher_result / 9.81);
+    wmove(sub1, 23, 39); // многоболтовое соединение
+    wprintw(sub1, "%.2f kN (%.2f T)", 0.9 * max_sher_result, 0.9 * max_sher_result / 9.81);
+    // Макс. сила на смятие
+    wmove(sub1, 24, 0);
+    waddch(sub1, ACS_DIAMOND);
+    wmove(sub1, 24, 2);
+    wprintw(sub1, "Bear. force:");
+    wmove(sub1, 24, 17); // один болт
+    wprintw(sub1, "%.2f kN (%.2f T)", max_bear_result, max_bear_result / 9.81);
+    wmove(sub1, 24, 39); // многоболтовое соединение
+    wprintw(sub1, "%.2f kN (%.2f T)", 0.9 * max_bear_result, 0.9 * max_bear_result / 9.81);
+    // Макс. сила на растяжение
+    wmove(sub1, 25, 0);
+    waddch(sub1, ACS_DIAMOND);
+    wmove(sub1, 25, 2);
+    wprintw(sub1, "Tens. force: ");
+    wmove(sub1, 25, 17); // один болт
+    wprintw(sub1, "%.2f kN (%.2f T)", max_tens_result, max_tens_result / 9.81);
+    wmove(sub1, 25, 39); // многоболтовое соединение
+    wprintw(sub1, "%.2f kN (%.2f T)", max_tens_result, max_tens_result / 9.81);
 }
