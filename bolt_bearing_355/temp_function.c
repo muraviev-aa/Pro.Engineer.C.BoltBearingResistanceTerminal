@@ -350,6 +350,75 @@ unsigned int enter_force_y(WINDOW *sub1, WINDOW *a, int color_pair)
     return force_y;
 }
 
+// Ввод силы по оси Z
+unsigned int enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair)
+{
+    char info_force_z[6];
+    unsigned int force_z;
+    char ch;
+
+    do
+    {
+        wclear(a);
+        wbkgd(a, COLOR_PAIR(color_pair));
+        wmove(a, 0, 2);
+        waddstr(a, "6.Enter the Z-axis force [kN]: ");
+        wgetnstr(a, info_force_z, 5);
+        force_z = atoi(info_force_z);
+        wmove(a, 1, 4);
+        wprintw(a, "Z-axis force is %d kN. If the information is correct then press 'y', "
+                   "if incorrect press 'n' ", force_z);
+        ch = (char) wgetch(a);
+        if (ch == 'n')
+            delete_char(a, 1, 1, 95);
+    } while (ch != 'y');
+    // Вывод значения силы, действующей по оси Х
+    wmove(sub1, 4, 36);
+    waddch(sub1, ACS_DIAMOND);
+    wmove(sub1, 4, 38);
+    wprintw(sub1, "Z force is %d kN", force_z);
+    wmove(b, 3, 27);
+    waddch(b, ACS_UARROW);
+    wmove(b, 3, 29);
+    waddch(b, ACS_UARROW);
+    wmove(b, 3, 31);
+    waddch(b, ACS_UARROW);
+    wrefresh(sub1);
+    wrefresh(b);
+    return force_z;
+}
+
+// Ввод количества болтов в соединении
+unsigned int enter_num_bolts(WINDOW *b, WINDOW *a, int color_pair)
+{
+    char info_num_bolts[3];
+    unsigned int num_bolts;
+    char ch;
+
+    do
+    {
+        wclear(a);
+        wbkgd(a, COLOR_PAIR(color_pair));
+        wmove(a, 0, 2);
+        waddstr(a, "7.Enter number of bolts: ");
+        wgetnstr(a, info_num_bolts, 2);
+        num_bolts = atoi(info_num_bolts);
+        wmove(a, 1, 4);
+        wprintw(a, "Number of bolts is %d. If the information is correct then press 'y', "
+                   "if incorrect press 'n' ", num_bolts);
+        ch = (char) wgetch(a);
+        if (ch == 'n')
+            delete_char(a, 1, 1, 95);
+    } while (ch != 'y');
+    // Вывод значения силы, действующей по оси Х
+    /*wmove(sub1, 4, 36);
+    waddch(sub1, ACS_DIAMOND);*/
+    wmove(b, 4, 1);
+    wprintw(b, "Number of bolts is %d", num_bolts);
+    wrefresh(b);
+    return num_bolts;
+}
+
 /* Блок болта */
 void block_bolt(WINDOW *b, int number_slices)
 {
@@ -762,7 +831,7 @@ double calc_tens_n_bt(unsigned int r_bt, double a_bn)
 }
 
 // Рисуем систему координат
-void draw_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y)
+void draw_coord_sys(WINDOW *b)
 {/* Система координат */
     // ось X
     wmove(b, 4, 49);
@@ -775,8 +844,6 @@ void draw_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y)
     waddch(b, ACS_HLINE);
     wmove(b, 5, 55);
     wprintw(b, "x");
-    wmove(b, 6, 49);
-    wprintw(b, "%d kN", force_x);
     // ось Y
     wmove(b, 5, 47);
     wprintw(b, "/");
@@ -784,8 +851,6 @@ void draw_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y)
     wprintw(b, "/");
     wmove(b, 6, 44);
     wprintw(b, "y");
-    wmove(b, 5, 38);
-    wprintw(b, "%d kN", force_y);
     // ось Z
     wmove(b, 3, 48);
     waddch(b, ACS_VLINE);
@@ -793,6 +858,22 @@ void draw_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y)
     wprintw(b, "|");
     wmove(b, 1, 46);
     wprintw(b, "z");
+    // Обновить b
+    wrefresh(b);
+}
+
+// Рисуем силы на системе координат
+void draw_force_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y, unsigned int force_z)
+{
+    // Сила вдоль оси X
+    wmove(b, 6, 49);
+    wprintw(b, "%d kN", force_x);
+    // Сила вдоль оси Y
+    wmove(b, 5, 38);
+    wprintw(b, "%d kN", force_y);
+    // Сила вдоль оси Z
+    wmove(b, 1, 50);
+    wprintw(b, "%d kN", force_z);
     // Обновить b
     wrefresh(b);
 }

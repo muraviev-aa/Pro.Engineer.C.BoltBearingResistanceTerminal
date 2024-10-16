@@ -126,6 +126,12 @@ unsigned int enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair);
 // Ввод силы по оси Y
 unsigned int enter_force_y(WINDOW *sub1, WINDOW *a, int color_pair);
 
+// Ввод силы по оси Z
+unsigned int enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair);
+
+// Ввод количества болтов в соединении
+unsigned int enter_num_bolts(WINDOW *b, WINDOW *a, int color_pair);
+
 // Рисуем таблицу
 void draw_table(WINDOW *sub1, int num);
 
@@ -145,7 +151,10 @@ double calc_bearing_n_bs(unsigned int r_bs, double a_b);
 double calc_tens_n_bt(unsigned int r_bt, double a_bn);
 
 // Рисуем систему координат
-void draw_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y);
+void draw_coord_sys(WINDOW *b);
+
+// Рисуем силы на системе координат
+void draw_force_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y, unsigned int force_z);
 
 // Вывод результатов расчета_1
 void output_results_1(WINDOW *sub1, double max_sher_result, double max_bear_result, double max_tens_result);

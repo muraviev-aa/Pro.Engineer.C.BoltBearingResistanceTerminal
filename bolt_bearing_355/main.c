@@ -1,6 +1,7 @@
 #include <curses.h>
 #include "temp_function.h"
 #include <stdio.h>
+#include <math.h>
 
 #define SIZE_STEEL 15           // число строк в файле tabl_B_3.csv
 #define SIZE_STEEL_ELEM 15      // число строк в файле tabl_G_6.csv
@@ -36,7 +37,7 @@ int main(void)
     int count_st_el;   // количество строк в файле tabl_G_6.csv
     int count_blt;     // количество строк в файле tabl_G_5.csv
     int count_blt_ar;  // количество строк в файле tabl_G_9.csv
-    unsigned int r_u, r_bs, r_un, r_bp, r_bt, force_x, force_y;
+    unsigned int r_u, r_bs, r_un, r_bp, r_bt, force_x, force_y, force_z, num_bolts;
     double a_b, a_bn, max_sher_result, max_bear_result, max_tens_result;
 
     initscr();
@@ -135,16 +136,26 @@ int main(void)
     output_results_1(sub1, max_sher_result, max_bear_result, max_tens_result);
     wrefresh(sub1);
 
-    // 10. Вводим силу, действующую по оси Х
+    // 10. Рисуем систему координат
+    draw_coord_sys(b);
+
+    // 11. Вводим силу, действующую по оси Х
     force_x = enter_force_x(sub1, a, 3);
 
-    // 11. Вводим силу, действующую по оси Y
+    // 12. Вводим силу, действующую по оси Y
     force_y = enter_force_y(sub1, a, 4);
 
-    // 12. Рисуем систему координат
-    draw_coord_sys(b, force_x, force_y);
+    // 13. Вводим силу, действующую по оси Z
+    force_z = enter_force_z(sub1, a, b, 5);
 
+    // 13. Рисуем силы на системе координат
+    draw_force_coord_sys(b, force_x, force_y, force_z);
 
+    // 14. Ввод количества болтов в соединении
+    num_bolts = enter_num_bolts(b, a, 6);
+
+    wmove(b, 20, 1);
+    wprintw(b, "Total shear force %.2f kN", sqrt(pow(force_x, 2) + pow(force_y, 2)));
 
     wrefresh(sub1);
     wrefresh(a);
