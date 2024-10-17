@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#define STEEL_NAME 355
+
 typedef struct
 {
     unsigned int steel_name;       // марка стали

@@ -553,14 +553,14 @@ unsigned int design_steel_resistance_r_u(const steel *info, int count)
 
     for (int i = 0; i < count; i++)
     {
-        if (info[i].steel_name == 355 && package_info[2] >= (int) info[i].thickness_1
+        if (info[i].steel_name == STEEL_NAME && package_info[2] >= (int) info[i].thickness_1
             && package_info[2] <= (int) info[i].thickness_2)
             first_r_u = info[i].r_u;
-        if (info[i].steel_name == 355 && package_info[3] >= (int) info[i].thickness_1
+        if (info[i].steel_name == STEEL_NAME && package_info[3] >= (int) info[i].thickness_1
             && package_info[3] <= (int) info[i].thickness_2)
             second_r_u = info[i].r_u;
     }
-    r_u = (first_r_u < second_r_u) ? first_r_u : second_r_u;
+    r_u = (first_r_u > second_r_u) ? first_r_u : second_r_u;
     return r_u;
 }
 
@@ -573,14 +573,14 @@ unsigned int design_steel_resistance_r_un(const steel *info, int count)
 
     for (int i = 0; i < count; i++)
     {
-        if (info[i].steel_name == 355 && package_info[2] >= (int) info[i].thickness_1
+        if (info[i].steel_name == STEEL_NAME && package_info[2] >= (int) info[i].thickness_1
             && package_info[2] <= (int) info[i].thickness_2)
             first_r_un = info[i].r_un;
-        if (info[i].steel_name == 355 && package_info[3] >= (int) info[i].thickness_1
+        if (info[i].steel_name == STEEL_NAME && package_info[3] >= (int) info[i].thickness_1
             && package_info[3] <= (int) info[i].thickness_2)
             second_r_un = info[i].r_un;
     }
-    r_un = (first_r_un < second_r_un) ? first_r_un : second_r_un;
+    r_un = (first_r_un > second_r_un) ? first_r_un : second_r_un;
     return r_un;
 }
 
@@ -758,7 +758,7 @@ void data_draw_table_steel(WINDOW *sub1, unsigned int r_u, unsigned int r_bp, un
     wmove(sub1, num + 2, 3);
     wprintw(sub1, "Data  name");
     wmove(sub1, num + 4, 6);
-    wprintw(sub1, "C355");
+    wprintw(sub1, "C%d", STEEL_NAME);
     /* Заполнение Ru */
     wmove(sub1, num + 2, 20);
     wprintw(sub1, "Ru");
