@@ -155,8 +155,9 @@ int main(void)
     num_bolts = enter_num_bolts(b, a, 6);
 
     // 15. Считаем коэффициент использования болта по срезу и растяжению
-    double k_sher, k_tens;
+    double k_sher, k_tens, k_bear;
     double total_shear_force = sqrt(pow(force_x, 2) + pow(force_y, 2));
+    int thick_det;
     /* Суммарное срезающее усилие */
     wmove(b, 20, 1);
     wprintw(b, "Total shear force %.2f kN = %.2f T", total_shear_force, total_shear_force / 9.81);
@@ -170,11 +171,22 @@ int main(void)
     waddch(b, ACS_DIAMOND);
     wmove(b, 20, 44);
     wprintw(b, "K_shear = %.2f", k_sher);
+
+    /* Определение коэффициента использования по смятию */
+    thick_det = package_info[2] < package_info[3] ? package_info[2] : package_info[3];
+    k_bear = total_shear_force / (r_bp * package_info[0] * num_bolts * thick_det);
+    // Вывод результата на экран
+    wmove(b, 21, 42);
+    waddch(b, ACS_DIAMOND);
+    wmove(b, 21, 44);
+    wprintw(b, "K_bear = %.2f", k_bear);
+
     /* Определение коэффициента использования по растягивающему усилию */
     k_tens = force_z / (max_tens_result * num_bolts);
-    wmove(b, 23, 42);
+    // Вывод результата на экран
+    wmove(b, 22, 42);
     waddch(b, ACS_DIAMOND);
-    wmove(b, 23, 44);
+    wmove(b, 22, 44);
     wprintw(b, "K_tens = %.2f", k_tens);
 
     wrefresh(sub1);

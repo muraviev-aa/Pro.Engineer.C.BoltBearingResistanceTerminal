@@ -810,7 +810,7 @@ double calc_bearing_n_bp(unsigned int r_bp)
 {
     int thick_part_result;
 
-    if (package_info[2] <= package_info[3])
+    if (package_info[2] < package_info[3])
         thick_part_result = package_info[2];
     else
         thick_part_result = package_info[3];
