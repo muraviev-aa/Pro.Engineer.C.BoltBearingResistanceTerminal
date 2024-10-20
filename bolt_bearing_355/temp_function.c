@@ -377,12 +377,16 @@ unsigned int enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair)
     waddch(sub1, ACS_DIAMOND);
     wmove(sub1, 4, 38);
     wprintw(sub1, "Z force is %d kN", force_z);
-    wmove(b, 3, 27);
-    waddch(b, ACS_UARROW);
-    wmove(b, 3, 29);
-    waddch(b, ACS_UARROW);
-    wmove(b, 3, 31);
-    waddch(b, ACS_UARROW);
+    if (force_z > 0)
+    {
+        int pos = 27;
+        while (pos <= 31)
+        {
+            wmove(b, 3, pos);
+            waddch(b, ACS_UARROW);
+            pos += 2;
+        }
+    }
     wrefresh(sub1);
     wrefresh(b);
     return force_z;
@@ -651,6 +655,8 @@ double bolt_a_bn(const bolt_area *info, int count)
 // Рисуем таблицу
 void draw_table(WINDOW *sub1, int num)
 {
+    int step = 14;
+    int number = 14;
     // 1-я горизонтальная линия
     wmove(sub1, num, 1);
     waddch(sub1, ACS_ULCORNER); // верхний левый угол
@@ -746,6 +752,28 @@ void draw_table(WINDOW *sub1, int num)
         wmove(sub1, num + 4, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
+    // Вертикальная линия
+    wmove(sub1, num + 1, 1);
+    waddch(sub1, ACS_VLINE); // горизонтальная линия
+    wmove(sub1, num + 1, 14);
+    waddch(sub1, ACS_VLINE); // горизонтальная линия
+    while (number <= 56)
+    {
+        wmove(sub1, num + 1, number + step);
+        waddch(sub1, ACS_VLINE); // горизонтальная линия
+        number += 14;
+    }
+    wmove(sub1, num + 3, 1);
+    waddch(sub1, ACS_VLINE); // горизонтальная линия
+    wmove(sub1, num + 3, 14);
+    waddch(sub1, ACS_VLINE); // горизонтальная линия
+    number = 14;
+    while (number <= 56)
+    {
+        wmove(sub1, num + 3, number + step);
+        waddch(sub1, ACS_VLINE); // горизонтальная линия
+        number += 14;
+    }
 }
 
 // Заполняем таблицу характеристиками стали
@@ -808,25 +836,28 @@ void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, do
 // Расчет на смятие / максимальное усилие на смятие [кН]
 double calc_bearing_n_bp(unsigned int r_bp)
 {
-    int thick_part_result;
+    int thick_part_result; // толщина наименьшего сминаемого пакета
 
     if (package_info[2] < package_info[3])
         thick_part_result = package_info[2];
     else
         thick_part_result = package_info[3];
 
+    // [0.001 * Н/мм^2 * мм * мм] = [кН]
     return 0.001 * r_bp * package_info[0] * thick_part_result;
 }
 
 // Расчет на срез / максимальное усилие на срез [кН]
 double calc_bearing_n_bs(unsigned int r_bs, double a_b)
 {
+    // [0.1 * Н/мм^2 * см^2] = [кН]
     return 0.1 * r_bs * a_b * package_info[1];
 }
 
 // Расчет на растяжение / максимальное усилие на растяжение [кН]
 double calc_tens_n_bt(unsigned int r_bt, double a_bn)
 {
+    // [0.1 * Н/мм^2 * см^2] = [кН]
     return 0.1 * r_bt * a_bn;
 }
 
@@ -913,4 +944,79 @@ void output_results_1(WINDOW *sub1, double max_sher_result, double max_bear_resu
     wprintw(sub1, "%.2f kN (%.2f T)", max_tens_result, max_tens_result / 9.81);
     wmove(sub1, 25, 39); // многоболтовое соединение
     wprintw(sub1, "%.2f kN (%.2f T)", max_tens_result, max_tens_result / 9.81);
+}
+
+// Определение коэффициента использования по срезающему усилию
+double sher_coefficient(WINDOW *b, unsigned int num_bolts, double max_sher_result,
+                        double total_shear_force)
+{
+    double k_sher;
+    if (num_bolts == 1)
+        k_sher = total_shear_force / (max_sher_result * num_bolts);
+    else
+        k_sher = total_shear_force / (max_sher_result * num_bolts * 0.9);
+    // Вывод результата на экран
+    wmove(b, 20, 42);
+    waddch(b, ACS_DIAMOND);
+    wmove(b, 20, 44);
+    wprintw(b, "K_shear = %.2f", k_sher);
+    if (k_sher > 1)
+    {
+        wmove(b, 20, 40);
+        waddch(b, ACS_BSBS);
+    }
+    return k_sher;
+}
+
+// Определение коэффициента использования по смятию
+void bear_coefficient(WINDOW *b, unsigned int num_bolts, double max_bear_result, double total_shear_force)
+{
+    double k_bear;
+    if (num_bolts == 1)
+        k_bear = total_shear_force / (max_bear_result * num_bolts);
+    else
+        k_bear = total_shear_force / (max_bear_result * num_bolts * 0.9);
+    // Вывод результата на экран
+    wmove(b, 21, 42);
+    waddch(b, ACS_DIAMOND);
+    wmove(b, 21, 44);
+    wprintw(b, "K_bear  = %.2f", k_bear);
+    if (k_bear > 1)
+    {
+        wmove(b, 21, 40);
+        waddch(b, ACS_BSBS);
+    }
+}
+
+// Определение коэффициента использования по растяжению
+double tens_coefficient(WINDOW *b, unsigned int force_z, unsigned int num_bolts, double max_tens_result)
+{
+    double k_tens = force_z / (max_tens_result * num_bolts);
+    // Вывод результата на экран
+    wmove(b, 22, 42);
+    waddch(b, ACS_DIAMOND);
+    wmove(b, 22, 44);
+    wprintw(b, "K_tens  = %.2f", k_tens);
+    if (k_tens > 1)
+    {
+        wmove(b, 22, 40);
+        waddch(b, ACS_BSBS);
+    }
+    return k_tens;
+}
+
+// Определение коэффициента использования по срезу и растяжению
+void sher_tens_coefficient(WINDOW *b, double k_sher, double k_tens)
+{
+    double k_sher_tens = sqrt(pow(k_sher, 2) + pow(k_tens, 2));
+    // Вывод результата на экран
+    wmove(b, 23, 42);
+    waddch(b, ACS_DIAMOND);
+    wmove(b, 23, 44);
+    wprintw(b, "K_sh/t  = %.2f", k_sher_tens);
+    if (k_sher_tens > 1)
+    {
+        wmove(b, 23, 40);
+        waddch(b, ACS_BSBS);
+    }
 }

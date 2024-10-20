@@ -161,4 +161,17 @@ void draw_force_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y,
 // Вывод результатов расчета_1
 void output_results_1(WINDOW *sub1, double max_sher_result, double max_bear_result, double max_tens_result);
 
+// Определение коэффициента использования по срезающему усилию
+double sher_coefficient(WINDOW *b, unsigned int num_bolts, double max_sher_result,
+                        double total_shear_force);
+
+// Определение коэффициента использования по смятию
+void bear_coefficient(WINDOW *b, unsigned int num_bolts, double max_bear_result, double total_shear_force);
+
+// Определение коэффициента использования по растяжению
+double tens_coefficient(WINDOW *b, unsigned int force_z, unsigned int num_bolts, double max_tens_result);
+
+// Определение коэффициента использования по срезу и растяжению
+void sher_tens_coefficient(WINDOW *b, double k_sher, double k_tens);
+
 #endif //BOLT_BEARING_355_TEMP_FUNCTION_H

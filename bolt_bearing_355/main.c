@@ -38,7 +38,8 @@ int main(void)
     int count_blt;     // количество строк в файле tabl_G_5.csv
     int count_blt_ar;  // количество строк в файле tabl_G_9.csv
     unsigned int r_u, r_bs, r_un, r_bp, r_bt, force_x, force_y, force_z, num_bolts;
-    double a_b, a_bn, max_sher_result, max_bear_result, max_tens_result;
+    double a_b, a_bn, max_sher_result, max_bear_result, max_tens_result,
+            total_shear_force, k_sher, k_tens;
 
     initscr();
 
@@ -154,43 +155,23 @@ int main(void)
     // 14. Ввод количества болтов в соединении
     num_bolts = enter_num_bolts(b, a, 6);
 
-    // 15. Считаем коэффициент использования болта по срезу и растяжению
-    double k_sher, k_tens, k_bear;
-    double total_shear_force = sqrt(pow(force_x, 2) + pow(force_y, 2));
-    int thick_det;
-    /* Суммарное срезающее усилие */
+    // 15. Определение суммарного срезающего усилия
+    total_shear_force = sqrt(pow(force_x, 2) + pow(force_y, 2));
+    /* Вывод результата */
     wmove(b, 20, 1);
     wprintw(b, "Total shear force %.2f kN = %.2f T", total_shear_force, total_shear_force / 9.81);
-    /* Определение коэффициента использования по срезающему усилию */
-    if (num_bolts == 1)
-        k_sher = total_shear_force / (max_sher_result * num_bolts);
-    else
-        k_sher = total_shear_force / (max_sher_result * num_bolts * 0.9);
-    // Вывод результата на экран
-    wmove(b, 20, 42);
-    waddch(b, ACS_DIAMOND);
-    wmove(b, 20, 44);
-    wprintw(b, "K_shear = %.2f", k_sher);
 
-    /* Определение коэффициента использования по смятию */
-    if (num_bolts == 1)
-        k_bear = total_shear_force / (max_bear_result * num_bolts);
-    else
-        k_bear = total_shear_force / (max_bear_result * num_bolts * 0.9);
+    // 16. Определение коэффициента использования по срезающему усилию
+    k_sher = sher_coefficient(b, num_bolts, max_sher_result, total_shear_force);
 
-    // Вывод результата на экран
-    wmove(b, 21, 42);
-    waddch(b, ACS_DIAMOND);
-    wmove(b, 21, 44);
-    wprintw(b, "K_bear  = %.2f", k_bear);
+    // 17. Определение коэффициента использования по смятию
+    bear_coefficient(b, num_bolts, max_bear_result, total_shear_force);
 
-    /* Определение коэффициента использования по растягивающему усилию */
-    k_tens = force_z / (max_tens_result * num_bolts);
-    // Вывод результата на экран
-    wmove(b, 22, 42);
-    waddch(b, ACS_DIAMOND);
-    wmove(b, 22, 44);
-    wprintw(b, "K_tens  = %.2f", k_tens);
+    // 18. Определение коэффициента использования по растягивающему усилию
+    k_tens = tens_coefficient(b, force_z, num_bolts, max_tens_result);
+
+    // 19. Определение коэффициента использования по срезу и растяжению
+    sher_tens_coefficient(b, k_sher, k_tens);
 
     wrefresh(sub1);
     wrefresh(a);
@@ -208,6 +189,11 @@ int main(void)
     endwin();
     return 0;
 }
+
+
+
+
+
 
 
 
