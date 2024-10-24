@@ -6,14 +6,15 @@
 #define SIZE_STEEL 15           // число строк в файле tabl_B_3.csv
 #define SIZE_STEEL_ELEM 15      // число строк в файле tabl_G_6.csv
 #define SIZE_BOLT 5             // число строк в файле tabl_G_5.csv
-#define SIZE_BOLT_AREA 10       // число строк в файле tabl_G_9.csv
+#define SIZE_BOLT_AREA 11       // число строк в файле tabl_G_9.csv
 #define USER 100
 #define USER1 101
 #define USER2 102
 #define USER3 103
 
 // Массив под входные данные
-int package_info[4];
+int package_info[2];
+double package_thick_info[2];
 
 int main(void)
 {

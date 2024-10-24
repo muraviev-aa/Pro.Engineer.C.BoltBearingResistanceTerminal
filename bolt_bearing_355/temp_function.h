@@ -44,10 +44,14 @@ typedef struct
 /* Массив под входные данные
  * package_info[0] - диаметр болта
  * package_info[1] - количество срезов
- * package_info[2] - толщина (сумма толщин) детали, сминаемой в одну сторону
- * package_info[3] - толщина (сумма толщин) детали, сминаемой в другую сторону
 */
-extern int package_info[4];
+extern int package_info[2];
+
+/* Массив под входные данные толщин
+ * package_thick_info[0] - толщина (сумма толщин) детали, сминаемой в одну сторону
+ * package_thick_info[1] - толщина (сумма толщин) детали, сминаемой в другую сторону
+*/
+extern double package_thick_info[2];
 
 // Открываем файл
 int open_file(WINDOW *name, FILE **fptr, char *name_file, int position);
