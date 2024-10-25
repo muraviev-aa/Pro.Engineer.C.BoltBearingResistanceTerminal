@@ -122,14 +122,13 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     char info_bolt_diam[3];
     char info_number_slices[2];
     char info_thick_first_part[3];
-    char info_thick_second_part[3];
     char ch;
     /* Пункты входных данных */
     wmove(sub1, 1, 7);
     waddstr(sub1, "Initial data:");
     wmove(sub1, 1, 40);
     waddstr(sub1, "Active forces:");
-    for (int i = 2; i <= 6; i++)
+    for (int i = 2; i <= 5; i++)
     {
         wmove(sub1, i, 1);
         waddch(sub1, ACS_LANTERN);
@@ -196,77 +195,21 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     block_washer(b, 15);
     wrefresh(sub1);
 
-    if (package_info[1] == 1) // если один расчетный срез
-    {
-        char thick_first_1[47] = "3.Enter the thickness of the first part (mm): ";
-        char thick_first_2[111] = "Thickness of the first part is %.1f mm. If the information "
-                                  "is correct then press 'y', if incorrect press 'n' ";
-        char thick_second_1[48] = "4.Enter the thickness of the second part (mm): ";
-        char thick_second_2[111] = "Thickness of the second part is %.1f mm. If the information "
-                                   "is correct then press 'y', if incorrect press 'n' ";
+    /* Ввод толщины детали */
+    char thick_first_1[47] = "3.Enter the thickness of the part (mm): ";
+    char thick_first_2[111] = "Thickness of the part is %.1f mm. If the information "
+                              "is correct then press 'y', if incorrect press 'n' ";
 
-        /* Ввод толщины первой сминаемой в одном направлении детали */
-        enter_thick_info(a, 5, 0, info_thick_first_part, ch,
-                         thick_first_1, thick_first_2);
+    /* Ввод толщины первой сминаемой в одном направлении детали */
+    enter_thick_info(a, 5, 0, info_thick_first_part, ch,
+                     thick_first_1, thick_first_2);
 
-        // Вывод результата ввода толщины первого элемента сминаемого в одном направлении
-        wmove(sub1, 5, 3);
-        //wprintw(sub1, thick_first_3, package_info[2]);
-        wprintw(sub1, "first part    is %.1f mm", package_thick_info[0]);
-        wmove(sub1, 5, 1);
-        waddch(sub1, ACS_DIAMOND);
-        wmove(sub1, 5, 27);
-        waddch(sub1, ACS_LARROW);
-        wrefresh(sub1);
-
-        /* Ввод толщины второй сминаемой в другом направлении детали */
-        enter_thick_info(a, 6, 1, info_thick_second_part, ch,
-                         thick_second_1, thick_second_2);
-
-        // Вывод результата ввода толщины второго элемента сминаемого в другом направлении
-        wmove(sub1, 6, 3);
-        //wprintw(sub1, "second part   is %d mm", package_info[3]);
-        wprintw(sub1, "second part   is %.1f mm", package_thick_info[1]);
-        wmove(sub1, 6, 1);
-        waddch(sub1, ACS_DIAMOND);
-        wmove(sub1, 6, 27);
-        waddch(sub1, ACS_RARROW);
-        wrefresh(sub1);
-    } else
-    {
-        char thick_first_1[69] = "3.Enter the total thickness of parts bearing in one direction (mm): ";
-        char thick_first_2[113] = "Total thickness of parts bearing is %d mm. If the information "
-                                  "is correct then press 'y', if incorrect press 'n' ";
-        char thick_second_1[79] = "4.Enter the total thickness of the parts bearing in the other direction (mm): ";
-        char thick_second_2[113] = "Total thickness of parts bearing is %d mm. If the information "
-                                   "is correct then press 'y', if incorrect press 'n' ";
-
-        /* Ввод суммы первых сминаемых в одном направлении деталей */
-        enter_thick_info(a, 5, 0, info_thick_first_part, ch,
-                         thick_first_1, thick_first_2);
-
-        // Вывод результата ввода суммарной толщины
-        wmove(sub1, 5, 3);
-        wprintw(sub1, "total thickness  %.1f mm", package_thick_info[0]);
-        wmove(sub1, 5, 1);
-        waddch(sub1, ACS_DIAMOND);
-        wmove(sub1, 5, 27);
-        waddch(sub1, ACS_LARROW); // стрелка влево
-        wrefresh(sub1);
-
-        /* Ввод суммы вторых сминаемых в другом направлении деталей */
-        enter_thick_info(a, 6, 1, info_thick_first_part, ch,
-                         thick_second_1, thick_second_2);
-
-        // Вывод результата ввода суммарной толщины
-        wmove(sub1, 6, 3);
-        wprintw(sub1, "total thickness  %.1f mm", package_thick_info[1]);
-        wmove(sub1, 6, 1);
-        waddch(sub1, ACS_DIAMOND);
-        wmove(sub1, 6, 27);
-        waddch(sub1, ACS_RARROW); // стрелка вправо
-        wrefresh(sub1);
-    }
+    // Вывод результата ввода толщины первого элемента сминаемого в одном направлении
+    wmove(sub1, 5, 3);
+    wprintw(sub1, "thick. part is %.1f mm", package_thick_info[0]);
+    wmove(sub1, 5, 1);
+    waddch(sub1, ACS_DIAMOND);
+    wrefresh(sub1);
 }
 
 // Ввод толщин соединяемых деталей
@@ -282,7 +225,6 @@ void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch
         wgetnstr(a, arr, 4);
         package_thick_info[num_arr] = atof(arr);
         wmove(a, 1, 4);
-        //wprintw(a, text_2, package_info[num_arr]);
         wprintw(a, text_2, package_thick_info[num_arr]);
         ch = (char) wgetch(a);
         if (ch == 'n')
@@ -302,7 +244,7 @@ unsigned int enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair)
         wclear(a);
         wbkgd(a, COLOR_PAIR(color_pair));
         wmove(a, 0, 2);
-        waddstr(a, "5.Enter the X-axis force [kN]: ");
+        waddstr(a, "4.Enter the X-axis force [kN]: ");
         wgetnstr(a, info_force_x, 5);
         force_x = atoi(info_force_x);
         wmove(a, 1, 4);
@@ -553,20 +495,14 @@ void delete_char(WINDOW *w, int row, int column, int count_ch)
 // Читаем из полученных данных Ru - расчетное сопротивление стали по временному сопротивлению
 unsigned int design_steel_resistance_r_u(const steel *info, int count)
 {
-    unsigned int first_r_u = 0;
-    unsigned int second_r_u = 0;
     unsigned int r_u;
 
     for (int i = 0; i < count; i++)
     {
         if (info[i].steel_name == STEEL_NAME && package_thick_info[0] >= (int) info[i].thickness_1
             && package_thick_info[0] <= (int) info[i].thickness_2)
-            first_r_u = info[i].r_u;
-        if (info[i].steel_name == STEEL_NAME && package_thick_info[1] >= (int) info[i].thickness_1
-            && package_thick_info[1] <= (int) info[i].thickness_2)
-            second_r_u = info[i].r_u;
+            r_u = info[i].r_u;
     }
-    r_u = (first_r_u > second_r_u) ? first_r_u : second_r_u;
     return r_u;
 }
 
@@ -826,15 +762,8 @@ void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, do
 // Расчет на смятие / максимальное усилие на смятие [кН]
 double calc_bearing_n_bp(unsigned int r_bp)
 {
-    double thick_part_result; // толщина наименьшего сминаемого пакета
-
-    if (package_thick_info[0] < package_thick_info[1])
-        thick_part_result = package_thick_info[0];
-    else
-        thick_part_result = package_thick_info[1];
-
     // [0.001 * Н/мм^2 * мм * мм] = [кН]
-    return 0.001 * r_bp * package_info[0] * thick_part_result;
+    return (double) r_bp * (double) package_info[0] * package_thick_info[0] * 0.001;
 }
 
 // Расчет на срез / максимальное усилие на срез [кН]

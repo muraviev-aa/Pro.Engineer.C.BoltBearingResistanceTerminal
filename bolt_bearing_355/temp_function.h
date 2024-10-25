@@ -47,11 +47,8 @@ typedef struct
 */
 extern int package_info[2];
 
-/* Массив под входные данные толщин
- * package_thick_info[0] - толщина (сумма толщин) детали, сминаемой в одну сторону
- * package_thick_info[1] - толщина (сумма толщин) детали, сминаемой в другую сторону
-*/
-extern double package_thick_info[2];
+// наименьшая толщина (сумма толщин) детали, сминаемой в одну сторону
+extern double package_thick_info[];
 
 // Открываем файл
 int open_file(WINDOW *name, FILE **fptr, char *name_file, int position);
