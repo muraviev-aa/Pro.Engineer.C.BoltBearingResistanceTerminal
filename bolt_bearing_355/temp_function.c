@@ -139,7 +139,6 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         waddch(sub1, ACS_LANTERN);
     }
     wrefresh(sub1);
-
     /* Ввод диаметра болта */
     do
     {
@@ -166,7 +165,6 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     wmove(sub1, 3, 1);
     waddch(sub1, ACS_DIAMOND);
     wrefresh(sub1);
-
     /* Ввод количества расчетных срезов одного болта */
     do
     {
@@ -238,7 +236,6 @@ unsigned int enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair)
     char info_force_x[6];
     unsigned int force_x;
     char ch;
-
     do
     {
         wclear(a);
@@ -269,7 +266,6 @@ unsigned int enter_force_y(WINDOW *sub1, WINDOW *a, int color_pair)
     char info_force_y[6];
     unsigned int force_y;
     char ch;
-
     do
     {
         wclear(a);
@@ -300,7 +296,6 @@ unsigned int enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair)
     char info_force_z[6];
     unsigned int force_z;
     char ch;
-
     do
     {
         wclear(a);
@@ -342,7 +337,6 @@ unsigned int enter_num_bolts(WINDOW *b, WINDOW *a, int color_pair)
     char info_num_bolts[3];
     unsigned int num_bolts;
     char ch;
-
     do
     {
         wclear(a);
@@ -496,7 +490,6 @@ void delete_char(WINDOW *w, int row, int column, int count_ch)
 unsigned int design_steel_resistance_r_u(const steel *info, int count)
 {
     unsigned int r_u;
-
     for (int i = 0; i < count; i++)
     {
         if (info[i].steel_name == STEEL_NAME && package_thick_info[0] >= (int) info[i].thickness_1
@@ -512,7 +505,6 @@ unsigned int design_steel_resistance_r_un(const steel *info, int count)
     unsigned int first_r_un = 0;
     unsigned int second_r_un = 0;
     unsigned int r_un;
-
     for (int i = 0; i < count; i++)
     {
         if (info[i].steel_name == STEEL_NAME && package_thick_info[0] >= (int) info[i].thickness_1
@@ -542,7 +534,6 @@ unsigned int design_steel_resistance_r_bp(const steel_elem *info_st_el, int coun
 unsigned int design_bolt_resistance_r_bs(const bolt *info, int count)
 {
     unsigned int r_bs;
-
     for (int i = 0; i < count; i++)
     {
         if (info[i].class == 8.8)
@@ -555,7 +546,6 @@ unsigned int design_bolt_resistance_r_bs(const bolt *info, int count)
 unsigned int design_bolt_resistance_r_bt(const bolt *info, int count)
 {
     unsigned int r_bt;
-
     for (int i = 0; i < count; i++)
     {
         if (info[i].class == 8.8)
@@ -568,7 +558,6 @@ unsigned int design_bolt_resistance_r_bt(const bolt *info, int count)
 double bolt_a_b(const bolt_area *info, int count)
 {
     double a_b;
-
     for (int i = 0; i < count; i++)
     {
         if (info[i].d == package_info[0])
@@ -581,7 +570,6 @@ double bolt_a_b(const bolt_area *info, int count)
 double bolt_a_bn(const bolt_area *info, int count)
 {
     double a_bn;
-
     for (int i = 0; i < count; i++)
     {
         if (info[i].d == package_info[0])
@@ -593,8 +581,6 @@ double bolt_a_bn(const bolt_area *info, int count)
 // Рисуем таблицу
 void draw_table(WINDOW *sub1, int num)
 {
-    int step = 14;
-    int number = 14;
     // 1-я горизонтальная линия
     wmove(sub1, num, 1);
     waddch(sub1, ACS_ULCORNER); // верхний левый угол
@@ -626,7 +612,6 @@ void draw_table(WINDOW *sub1, int num)
         wmove(sub1, num, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
-
     // 2-я горизонтальная линия
     wmove(sub1, num + 2, 1);
     waddch(sub1, ACS_LTEE); // левый разделитель
@@ -658,7 +643,6 @@ void draw_table(WINDOW *sub1, int num)
         wmove(sub1, num + 2, i);
         waddch(sub1, ACS_HLINE); // горизонтальная линия
     }
-
     // 3-я горизонтальная линия
     wmove(sub1, num + 4, 1);
     waddch(sub1, ACS_LLCORNER); // левый разделитель
@@ -695,11 +679,20 @@ void draw_table(WINDOW *sub1, int num)
     waddch(sub1, ACS_VLINE); // горизонтальная линия
     wmove(sub1, num + 1, 14);
     waddch(sub1, ACS_VLINE); // горизонтальная линия
-
+    for (int i = 28; i <= 56; i += 14)
+    {
+        wmove(sub1, num + 1, i);
+        waddch(sub1, ACS_VLINE); // горизонтальная линия
+    }
     wmove(sub1, num + 3, 1);
     waddch(sub1, ACS_VLINE); // горизонтальная линия
     wmove(sub1, num + 3, 14);
     waddch(sub1, ACS_VLINE); // горизонтальная линия
+    for (int i = 28; i <= 56; i += 14)
+    {
+        wmove(sub1, num + 3, i);
+        waddch(sub1, ACS_VLINE); // горизонтальная линия
+    }
 }
 
 // Заполняем таблицу характеристиками стали
@@ -755,15 +748,13 @@ void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, do
     wprintw(sub1, "Rbt");
     wmove(sub1, num + 4, 45);
     wprintw(sub1, "%u N/mm^2", r_bt);
-    /* Заполнение Abn */
-
 }
 
 // Расчет на смятие / максимальное усилие на смятие [кН]
 double calc_bearing_n_bp(unsigned int r_bp)
 {
     // [0.001 * Н/мм^2 * мм * мм] = [кН]
-    return (double) r_bp * (double) package_info[0] * package_thick_info[0] * 0.001;
+    return 0.001 * r_bp * package_info[0] * package_thick_info[0];
 }
 
 // Расчет на срез / максимальное усилие на срез [кН]
@@ -782,7 +773,8 @@ double calc_tens_n_bt(unsigned int r_bt, double a_bn)
 
 // Рисуем систему координат
 void draw_coord_sys(WINDOW *b)
-{/* Система координат */
+{
+    /* Система координат */
     // ось X
     wmove(b, 4, 49);
     waddch(b, ACS_HLINE);

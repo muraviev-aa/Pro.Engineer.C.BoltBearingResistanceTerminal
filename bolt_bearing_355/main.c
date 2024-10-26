@@ -150,28 +150,28 @@ int main(void)
     // 13. Вводим силу, действующую по оси Z
     force_z = enter_force_z(sub1, a, b, 5);
 
-    // 13. Рисуем силы на системе координат
+    // 14. Рисуем силы на системе координат
     draw_force_coord_sys(b, force_x, force_y, force_z);
 
-    // 14. Ввод количества болтов в соединении
+    // 15. Ввод количества болтов в соединении
     num_bolts = enter_num_bolts(b, a, 6);
 
-    // 15. Определение суммарного срезающего усилия
+    // 16. Определение суммарного срезающего усилия
     total_shear_force = sqrt(pow(force_x, 2) + pow(force_y, 2));
     /* Вывод результата */
     wmove(b, 20, 1);
     wprintw(b, "Total shear force %.2f kN = %.2f T", total_shear_force, total_shear_force / 9.81);
 
-    // 16. Определение коэффициента использования по срезающему усилию
+    // 17. Определение коэффициента использования по срезающему усилию
     k_sher = sher_coefficient(b, num_bolts, max_sher_result, total_shear_force);
 
-    // 17. Определение коэффициента использования по смятию
+    // 18. Определение коэффициента использования по смятию
     bear_coefficient(b, num_bolts, max_bear_result, total_shear_force);
 
-    // 18. Определение коэффициента использования по растягивающему усилию
+    // 19. Определение коэффициента использования по растягивающему усилию
     k_tens = tens_coefficient(b, force_z, num_bolts, max_tens_result);
 
-    // 19. Определение коэффициента использования по срезу и растяжению
+    // 20. Определение коэффициента использования по срезу и растяжению
     sher_tens_coefficient(b, k_sher, k_tens);
 
     wrefresh(sub1);
