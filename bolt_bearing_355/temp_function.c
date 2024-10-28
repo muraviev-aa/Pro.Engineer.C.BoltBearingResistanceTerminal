@@ -126,7 +126,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     /* Пункты входных данных */
     wmove(sub1, 1, 7);
     waddstr(sub1, "Initial data:");
-    wmove(sub1, 1, 40);
+    wmove(sub1, 1, 36);
     waddstr(sub1, "Active forces:");
     for (int i = 2; i <= 5; i++)
     {
@@ -135,7 +135,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     }
     for (int i = 2; i <= 4; i++)
     {
-        wmove(sub1, i, 36);
+        wmove(sub1, i, 31);
         waddch(sub1, ACS_LANTERN);
     }
     wrefresh(sub1);
@@ -231,10 +231,10 @@ void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch
 }
 
 // Ввод силы по оси X
-unsigned int enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair)
+double enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair)
 {
-    char info_force_x[6];
-    unsigned int force_x;
+    char info_force_x[10];
+    double force_x;
     char ch;
     do
     {
@@ -242,20 +242,20 @@ unsigned int enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair)
         wbkgd(a, COLOR_PAIR(color_pair));
         wmove(a, 0, 2);
         waddstr(a, "4.Enter the X-axis force [kN]: ");
-        wgetnstr(a, info_force_x, 5);
-        force_x = atoi(info_force_x);
+        wgetnstr(a, info_force_x, 9);
+        force_x = atof(info_force_x);
         wmove(a, 1, 4);
-        wprintw(a, "X-axis force is %d kN. If the information is correct then press 'y', "
+        wprintw(a, "X-axis force is %.2f kN. If the information is correct then press 'y', "
                    "if incorrect press 'n' ", force_x);
         ch = (char) wgetch(a);
         if (ch == 'n')
             delete_char(a, 1, 1, 95);
     } while (ch != 'y');
     // Вывод значения силы, действующей по оси Х
-    wmove(sub1, 2, 36);
+    wmove(sub1, 2, 31);
     waddch(sub1, ACS_DIAMOND);
-    wmove(sub1, 2, 38);
-    wprintw(sub1, "X force is %d kN", force_x);
+    wmove(sub1, 2, 33);
+    wprintw(sub1, "X force is %.2f kN", force_x);
     wrefresh(sub1);
     return force_x;
 }
@@ -282,9 +282,9 @@ unsigned int enter_force_y(WINDOW *sub1, WINDOW *a, int color_pair)
             delete_char(a, 1, 1, 95);
     } while (ch != 'y');
     // Вывод значения силы, действующей по оси Х
-    wmove(sub1, 3, 36);
+    wmove(sub1, 3, 31);
     waddch(sub1, ACS_DIAMOND);
-    wmove(sub1, 3, 38);
+    wmove(sub1, 3, 33);
     wprintw(sub1, "Y force is %d kN", force_y);
     wrefresh(sub1);
     return force_y;
@@ -312,9 +312,9 @@ unsigned int enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair)
             delete_char(a, 1, 1, 95);
     } while (ch != 'y');
     // Вывод значения силы, действующей по оси Х
-    wmove(sub1, 4, 36);
+    wmove(sub1, 4, 31);
     waddch(sub1, ACS_DIAMOND);
-    wmove(sub1, 4, 38);
+    wmove(sub1, 4, 33);
     wprintw(sub1, "Z force is %d kN", force_z);
     if (force_z > 0)
     {
@@ -805,11 +805,11 @@ void draw_coord_sys(WINDOW *b)
 }
 
 // Рисуем силы на системе координат
-void draw_force_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y, unsigned int force_z)
+void draw_force_coord_sys(WINDOW *b, double force_x, unsigned int force_y, unsigned int force_z)
 {
     // Сила вдоль оси X
     wmove(b, 6, 49);
-    wprintw(b, "%d kN", force_x);
+    wprintw(b, "%.2f", force_x);
     // Сила вдоль оси Y
     wmove(b, 5, 38);
     wprintw(b, "%d kN", force_y);

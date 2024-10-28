@@ -38,9 +38,9 @@ int main(void)
     int count_st_el;   // количество строк в файле tabl_G_6.csv
     int count_blt;     // количество строк в файле tabl_G_5.csv
     int count_blt_ar;  // количество строк в файле tabl_G_9.csv
-    unsigned int r_u, r_bs, r_un, r_bp, r_bt, force_x, force_y, force_z, num_bolts;
+    unsigned int r_u, r_bs, r_un, r_bp, r_bt, force_y, force_z, num_bolts;
     double a_b, a_bn, max_sher_result, max_bear_result, max_tens_result,
-            total_shear_force, k_sher, k_tens;
+            total_shear_force, k_sher, k_tens, force_x;
 
     initscr();
 
@@ -160,7 +160,9 @@ int main(void)
     total_shear_force = sqrt(pow(force_x, 2) + pow(force_y, 2));
     /* Вывод результата */
     wmove(b, 20, 1);
-    wprintw(b, "Total shear force %.2f kN = %.2f T", total_shear_force, total_shear_force / 9.81);
+    wprintw(b, "Total shear force %.2f kN =", total_shear_force);
+    wmove(b, 21, 20);
+    wprintw(b, "= %.2f T", total_shear_force / 9.81);
 
     // 17. Определение коэффициента использования по срезающему усилию
     k_sher = sher_coefficient(b, num_bolts, max_sher_result, total_shear_force);

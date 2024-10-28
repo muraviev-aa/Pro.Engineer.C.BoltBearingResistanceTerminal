@@ -124,7 +124,7 @@ void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch
                       const char *text_1, const char *text_2);
 
 // Ввод силы по оси X
-unsigned int enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair);
+double enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair);
 
 // Ввод силы по оси Y
 unsigned int enter_force_y(WINDOW *sub1, WINDOW *a, int color_pair);
@@ -157,7 +157,7 @@ double calc_tens_n_bt(unsigned int r_bt, double a_bn);
 void draw_coord_sys(WINDOW *b);
 
 // Рисуем силы на системе координат
-void draw_force_coord_sys(WINDOW *b, unsigned int force_x, unsigned int force_y, unsigned int force_z);
+void draw_force_coord_sys(WINDOW *b, double force_x, unsigned int force_y, unsigned int force_z);
 
 // Вывод результатов расчета_1
 void output_results_1(WINDOW *sub1, double max_sher_result, double max_bear_result, double max_tens_result);
