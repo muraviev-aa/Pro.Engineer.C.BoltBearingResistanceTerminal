@@ -38,9 +38,9 @@ int main(void)
     int count_st_el;   // количество строк в файле tabl_G_6.csv
     int count_blt;     // количество строк в файле tabl_G_5.csv
     int count_blt_ar;  // количество строк в файле tabl_G_9.csv
-    unsigned int r_u, r_bs, r_un, r_bp, r_bt, force_y, force_z, num_bolts;
+    unsigned int r_u, r_bs, r_un, r_bp, r_bt, force_z, num_bolts;
     double a_b, a_bn, max_sher_result, max_bear_result, max_tens_result,
-            total_shear_force, k_sher, k_tens, force_x;
+            total_shear_force, k_sher, k_tens, force_x, force_y;
 
     initscr();
 
