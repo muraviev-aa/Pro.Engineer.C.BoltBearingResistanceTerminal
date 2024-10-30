@@ -130,7 +130,7 @@ double enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair);
 double enter_force_y(WINDOW *sub1, WINDOW *a, int color_pair);
 
 // Ввод силы по оси Z
-unsigned int enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair);
+double enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair);
 
 // Ввод количества болтов в соединении
 unsigned int enter_num_bolts(WINDOW *b, WINDOW *a, int color_pair);
@@ -157,7 +157,7 @@ double calc_tens_n_bt(unsigned int r_bt, double a_bn);
 void draw_coord_sys(WINDOW *b);
 
 // Рисуем силы на системе координат
-void draw_force_coord_sys(WINDOW *b, double force_x, double force_y, unsigned int force_z);
+void draw_force_coord_sys(WINDOW *b, double force_x, double force_y, double force_z);
 
 // Вывод результатов расчета_1
 void output_results_1(WINDOW *sub1, double max_sher_result, double max_bear_result, double max_tens_result);
@@ -170,7 +170,7 @@ double sher_coefficient(WINDOW *b, unsigned int num_bolts, double max_sher_resul
 void bear_coefficient(WINDOW *b, unsigned int num_bolts, double max_bear_result, double total_shear_force);
 
 // Определение коэффициента использования по растяжению
-double tens_coefficient(WINDOW *b, unsigned int force_z, unsigned int num_bolts, double max_tens_result);
+double tens_coefficient(WINDOW *b, double force_z, unsigned int num_bolts, double max_tens_result);
 
 // Определение коэффициента использования по срезу и растяжению
 void sher_tens_coefficient(WINDOW *b, double k_sher, double k_tens);

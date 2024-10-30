@@ -291,10 +291,10 @@ double enter_force_y(WINDOW *sub1, WINDOW *a, int color_pair)
 }
 
 // Ввод силы по оси Z
-unsigned int enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair)
+double enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair)
 {
-    char info_force_z[6];
-    unsigned int force_z;
+    char info_force_z[10];
+    double force_z;
     char ch;
     do
     {
@@ -302,10 +302,10 @@ unsigned int enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair)
         wbkgd(a, COLOR_PAIR(color_pair));
         wmove(a, 0, 2);
         waddstr(a, "6.Enter the Z-axis force [kN]: ");
-        wgetnstr(a, info_force_z, 5);
-        force_z = atoi(info_force_z);
+        wgetnstr(a, info_force_z, 9);
+        force_z = atof(info_force_z);
         wmove(a, 1, 4);
-        wprintw(a, "Z-axis force is %d kN. If the information is correct then press 'y', "
+        wprintw(a, "Z-axis force is %.2f kN. If the information is correct then press 'y', "
                    "if incorrect press 'n' ", force_z);
         ch = (char) wgetch(a);
         if (ch == 'n')
@@ -315,7 +315,7 @@ unsigned int enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair)
     wmove(sub1, 4, 31);
     waddch(sub1, ACS_DIAMOND);
     wmove(sub1, 4, 33);
-    wprintw(sub1, "Z force is %d kN", force_z);
+    wprintw(sub1, "Z force is %.2f kN", force_z);
     if (force_z > 0)
     {
         int pos = 27;
@@ -352,9 +352,6 @@ unsigned int enter_num_bolts(WINDOW *b, WINDOW *a, int color_pair)
         if (ch == 'n')
             delete_char(a, 1, 1, 95);
     } while (ch != 'y');
-    // Вывод значения силы, действующей по оси Х
-    /*wmove(sub1, 4, 36);
-    waddch(sub1, ACS_DIAMOND);*/
     wmove(b, 4, 1);
     wprintw(b, "Number of bolts is %d", num_bolts);
     wrefresh(b);
@@ -805,7 +802,7 @@ void draw_coord_sys(WINDOW *b)
 }
 
 // Рисуем силы на системе координат
-void draw_force_coord_sys(WINDOW *b, double force_x, double force_y, unsigned int force_z)
+void draw_force_coord_sys(WINDOW *b, double force_x, double force_y, double force_z)
 {
     // Сила вдоль оси X
     wmove(b, 6, 49);
@@ -815,7 +812,7 @@ void draw_force_coord_sys(WINDOW *b, double force_x, double force_y, unsigned in
     wprintw(b, "%.2f", force_y);
     // Сила вдоль оси Z
     wmove(b, 1, 50);
-    wprintw(b, "%d kN", force_z);
+    wprintw(b, "%.2f", force_z);
     // Обновить b
     wrefresh(b);
 }
@@ -900,7 +897,7 @@ void bear_coefficient(WINDOW *b, unsigned int num_bolts, double max_bear_result,
 }
 
 // Определение коэффициента использования по растяжению
-double tens_coefficient(WINDOW *b, unsigned int force_z, unsigned int num_bolts, double max_tens_result)
+double tens_coefficient(WINDOW *b, double force_z, unsigned int num_bolts, double max_tens_result)
 {
     double k_tens = force_z / (max_tens_result * num_bolts);
     // Вывод результата на экран
