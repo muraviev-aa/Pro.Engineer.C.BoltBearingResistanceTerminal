@@ -148,24 +148,26 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         waddstr(a, "1.Enter bolt diameter (mm): ");
         wgetnstr(a, info_bolt_diam, 2);
         package_info[0] = atoi(info_bolt_diam);
+        /* Проверка корректности введенного значения диаметра */
         if (package_info[0] != 12 && package_info[0] != 16 && package_info[0] != 18
             && package_info[0] != 20 && package_info[0] != 22 && package_info[0] != 24
             && package_info[0] != 27 && package_info[0] != 30 && package_info[0] != 36
             && package_info[0] != 42 && package_info[0] != 48)
         {
             wmove(a, 1, 4);
-            wprintw(a, "Incorrect bolt diameter entered. Press 'n'.");
+            wprintw(a, "Incorrect bolt diameter entered. Press any button");
+            wgetch(a);
+            delete_char(a, 1, 1, 95);
+            delete_char(a, 0, 29, 5);
+        } else
+        {
+            wmove(a, 1, 4);
+            wprintw(a, "Bolt diameter is %d mm. If the information is correct then press 'y', "
+                       "if incorrect press any button ", package_info[0]);
             ch = (char) wgetch(a);
             if (ch == 'n')
                 delete_char(a, 1, 1, 95);
         }
-        wmove(a, 1, 4);
-        wprintw(a, "Bolt diameter is %d mm. If the information is correct then press 'y', "
-                   "if incorrect press 'n' ", package_info[0]);
-        ch = (char) wgetch(a);
-        if (ch == 'n')
-            delete_char(a, 1, 1, 95);
-
     } while (ch != 'y');
     // Вывод результата ввода диаметра болта
     wmove(sub1, 2, 3);
