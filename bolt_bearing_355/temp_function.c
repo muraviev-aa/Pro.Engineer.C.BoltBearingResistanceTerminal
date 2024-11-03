@@ -157,16 +157,12 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
             wmove(a, 1, 4);
             wprintw(a, "Incorrect bolt diameter entered. Press any button");
             wgetch(a);
-            delete_char(a, 1, 1, 95);
-            delete_char(a, 0, 29, 5);
         } else
         {
             wmove(a, 1, 4);
             wprintw(a, "Bolt diameter is %d mm. If the information is correct then press 'y', "
                        "if incorrect press any button ", package_info[0]);
             ch = (char) wgetch(a);
-            if (ch == 'n')
-                delete_char(a, 1, 1, 95);
         }
     } while (ch != 'y');
     // Вывод результата ввода диаметра болта
@@ -190,10 +186,8 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         package_info[1] = atoi(info_number_slices);
         wmove(a, 1, 4);
         wprintw(a, "Number of slices is %d mm. If the information is correct then press 'y', "
-                   "if incorrect press 'n' ", package_info[1]);
+                   "if incorrect press any button ", package_info[1]);
         ch = (char) wgetch(a);
-        if (ch == 'n')
-            delete_char(a, 1, 1, 95);
     } while (ch != 'y');
     // Вывод количества расчетных срезов одного болта
     wmove(sub1, 4, 3);
@@ -207,16 +201,16 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     block_washer(b, 15);
     wrefresh(sub1);
 
-    /* Ввод толщины детали */
+    /* Ввод толщины (суммарной толщины) детали */
     char thick_first_1[47] = "3.Enter the thickness of the part (mm): ";
     char thick_first_2[111] = "Thickness of the part is %.1f mm. If the information "
-                              "is correct then press 'y', if incorrect press 'n' ";
+                              "is correct then press 'y', if incorrect press any button ";
 
-    /* Ввод толщины первой сминаемой в одном направлении детали */
+    /* Ввод толщины (суммарной толщины) сминаемой в одном направлении детали */
     enter_thick_info(a, 5, 0, info_thick_first_part, ch,
                      thick_first_1, thick_first_2);
 
-    // Вывод результата ввода толщины первого элемента сминаемого в одном направлении
+    // Вывод результата ввода толщины (суммарной толщины) элемента сминаемого в одном направлении
     wmove(sub1, 5, 3);
     wprintw(sub1, "thick. part is %.1f mm", package_thick_info[0]);
     wmove(sub1, 5, 1);
@@ -224,7 +218,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
     wrefresh(sub1);
 }
 
-// Ввод толщин соединяемых деталей
+// Ввод толщины (суммарной толщины) детали
 void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch,
                       const char *text_1, const char *text_2)
 {
@@ -239,8 +233,6 @@ void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch
         wmove(a, 1, 4);
         wprintw(a, text_2, package_thick_info[num_arr]);
         ch = (char) wgetch(a);
-        if (ch == 'n')
-            delete_char(a, 1, 1, 95);
     } while (ch != 'y');
 }
 
@@ -260,10 +252,8 @@ double enter_force_x(WINDOW *sub1, WINDOW *a, int color_pair)
         force_x = atof(info_force_x);
         wmove(a, 1, 4);
         wprintw(a, "X-axis force is %.2f kN. If the information is correct then press 'y', "
-                   "if incorrect press 'n' ", force_x);
+                   "if incorrect press any button ", force_x);
         ch = (char) wgetch(a);
-        if (ch == 'n')
-            delete_char(a, 1, 1, 95);
     } while (ch != 'y');
     // Вывод значения силы, действующей по оси Х
     wmove(sub1, 2, 31);
@@ -290,10 +280,8 @@ double enter_force_y(WINDOW *sub1, WINDOW *a, int color_pair)
         force_y = atof(info_force_y);
         wmove(a, 1, 4);
         wprintw(a, "Y-axis force is %.2f kN. If the information is correct then press 'y', "
-                   "if incorrect press 'n' ", force_y);
+                   "if incorrect press any button ", force_y);
         ch = (char) wgetch(a);
-        if (ch == 'n')
-            delete_char(a, 1, 1, 95);
     } while (ch != 'y');
     // Вывод значения силы, действующей по оси Х
     wmove(sub1, 3, 31);
@@ -320,10 +308,8 @@ double enter_force_z(WINDOW *sub1, WINDOW *a, WINDOW *b, int color_pair)
         force_z = atof(info_force_z);
         wmove(a, 1, 4);
         wprintw(a, "Z-axis force is %.2f kN. If the information is correct then press 'y', "
-                   "if incorrect press 'n' ", force_z);
+                   "if incorrect press any button ", force_z);
         ch = (char) wgetch(a);
-        if (ch == 'n')
-            delete_char(a, 1, 1, 95);
     } while (ch != 'y');
     // Вывод значения силы, действующей по оси Х
     wmove(sub1, 4, 31);
@@ -363,8 +349,6 @@ unsigned int enter_num_bolts(WINDOW *b, WINDOW *a, int color_pair)
         wprintw(a, "Number of bolts is %d. If the information is correct then press 'y', "
                    "if incorrect press 'n' ", num_bolts);
         ch = (char) wgetch(a);
-        if (ch == 'n')
-            delete_char(a, 1, 1, 95);
     } while (ch != 'y');
     wmove(b, 4, 1);
     wprintw(b, "Number of bolts is %d", num_bolts);
