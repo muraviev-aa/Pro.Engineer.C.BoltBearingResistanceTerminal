@@ -52,3 +52,5 @@ Mkfile.old
 dkms.conf
 /bolt_bearing_355/.idea
 /bolt_bearing_355/cmake-build-debug
+/bolt_bearing_255/cmake-build-debug
+/bolt_bearing_255/.idea
