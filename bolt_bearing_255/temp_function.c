@@ -476,8 +476,8 @@ unsigned int design_steel_resistance_r_u(const steel *info, int count)
     unsigned int r_u;
     for (int i = 0; i < count; i++)
     {
-        if (info[i].steel_name == STEEL_NAME && thick_part >= info[i].thickness_1
-            && thick_part <= info[i].thickness_2)
+        if (info[i].steel_name == STEEL_NAME && thick_part >= info[i].thickness_1 &&
+            thick_part <= info[i].thickness_2)
             r_u = info[i].r_u;
     }
     return r_u;

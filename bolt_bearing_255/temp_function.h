@@ -1,5 +1,5 @@
-#ifndef BOLT_BEARING_355_TEMP_FUNCTION_H
-#define BOLT_BEARING_355_TEMP_FUNCTION_H
+#ifndef BOLT_BEARING_255_TEMP_FUNCTION_H
+#define BOLT_BEARING_255_TEMP_FUNCTION_H
 
 #include <curses.h>
 #include <stdlib.h>
@@ -47,8 +47,7 @@ typedef struct
 */
 extern int package_info[2];
 
-// наименьшая толщина (минимальная сумма толщин) детали, сминаемой в одну сторону
-//extern double package_thick_info[];
+// Наименьшая толщина (минимальная сумма толщин) детали, сминаемой в одну сторону
 extern double thick_part;
 
 // Открываем файл
@@ -173,4 +172,4 @@ double tens_coefficient(WINDOW *b, double force_z, unsigned int num_bolts, doubl
 // Определение коэффициента использования по срезу и растяжению
 void sher_tens_coefficient(WINDOW *b, double k_sher, double k_tens);
 
-#endif //BOLT_BEARING_355_TEMP_FUNCTION_H
+#endif //BOLT_BEARING_255_TEMP_FUNCTION_H
