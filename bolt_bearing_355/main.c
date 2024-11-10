@@ -14,7 +14,9 @@
 
 // Массив под входные данные
 int package_info[2];
-double package_thick_info[1];
+
+// Толщина сминаемой детали
+double thick_part;
 
 int main(void)
 {

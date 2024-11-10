@@ -207,19 +207,19 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
                               "is correct then press 'y', if incorrect press any button ";
 
     /* Ввод толщины (суммарной толщины) сминаемой в одном направлении детали */
-    enter_thick_info(a, 5, 0, info_thick_first_part, ch,
+    enter_thick_info(a, 5, info_thick_first_part, ch,
                      thick_first_1, thick_first_2);
 
     // Вывод результата ввода толщины (суммарной толщины) элемента сминаемого в одном направлении
     wmove(sub1, 5, 3);
-    wprintw(sub1, "thick. part is %.1f mm", package_thick_info[0]);
+    wprintw(sub1, "thick. part is %.1f mm", thick_part);
     wmove(sub1, 5, 1);
     waddch(sub1, ACS_DIAMOND);
     wrefresh(sub1);
 }
 
 // Ввод толщины (суммарной толщины) детали
-void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch,
+void enter_thick_info(WINDOW *a, int color_pair, char *arr, char ch,
                       const char *text_1, const char *text_2)
 {
     do
@@ -229,9 +229,9 @@ void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch
         wmove(a, 0, 2);
         waddstr(a, text_1);
         wgetnstr(a, arr, 4);
-        package_thick_info[num_arr] = atof(arr);
+        thick_part = atof(arr);
         wmove(a, 1, 4);
-        wprintw(a, text_2, package_thick_info[num_arr]);
+        wprintw(a, text_2, thick_part);
         ch = (char) wgetch(a);
     } while (ch != 'y');
 }
@@ -470,25 +470,14 @@ void second_part_block(WINDOW *b, int position)
     }
 }
 
-/* Удаляем ранее введенные символы */
-void delete_char(WINDOW *w, int row, int column, int count_ch)
-{
-    for (int i = 0; i < count_ch; i++)
-    {
-        wmove(w, row, column++);
-        waddrawch(w, ' ');
-        wrefresh(w);
-    }
-}
-
 // Читаем из полученных данных Ru - расчетное сопротивление стали по временному сопротивлению
 unsigned int design_steel_resistance_r_u(const steel *info, int count)
 {
     unsigned int r_u;
     for (int i = 0; i < count; i++)
     {
-        if (info[i].steel_name == STEEL_NAME && package_thick_info[0] >= (int) info[i].thickness_1
-            && package_thick_info[0] <= (int) info[i].thickness_2)
+        if (info[i].steel_name == STEEL_NAME && thick_part >= (int) info[i].thickness_1
+            && thick_part <= (int) info[i].thickness_2)
             r_u = info[i].r_u;
     }
     return r_u;
@@ -497,19 +486,13 @@ unsigned int design_steel_resistance_r_u(const steel *info, int count)
 // Читаем из полученных данных Run - временное сопротивление стали
 unsigned int design_steel_resistance_r_un(const steel *info, int count)
 {
-    unsigned int first_r_un = 0;
-    unsigned int second_r_un = 0;
     unsigned int r_un;
     for (int i = 0; i < count; i++)
     {
-        if (info[i].steel_name == STEEL_NAME && package_thick_info[0] >= (int) info[i].thickness_1
-            && package_thick_info[0] <= (int) info[i].thickness_2)
-            first_r_un = info[i].r_un;
-        if (info[i].steel_name == STEEL_NAME && package_thick_info[1] >= (int) info[i].thickness_1
-            && package_thick_info[1] <= (int) info[i].thickness_2)
-            second_r_un = info[i].r_un;
+        if (info[i].steel_name == STEEL_NAME && thick_part >= (int) info[i].thickness_1
+            && thick_part <= (int) info[i].thickness_2)
+            r_un = info[i].r_un;
     }
-    r_un = (first_r_un > second_r_un) ? first_r_un : second_r_un;
     return r_un;
 }
 
@@ -749,7 +732,7 @@ void data_draw_table_bolt(WINDOW *sub1, unsigned int r_bs, unsigned int r_bt, do
 double calc_bearing_n_bp(unsigned int r_bp)
 {
     // [0.001 * Н/мм^2 * мм * мм] = [кН]
-    return 0.001 * r_bp * package_info[0] * package_thick_info[0];
+    return 0.001 * r_bp * package_info[0] * thick_part;
 }
 
 // Расчет на срез / максимальное усилие на срез [кН]

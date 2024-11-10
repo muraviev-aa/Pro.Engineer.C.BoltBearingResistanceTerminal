@@ -47,8 +47,8 @@ typedef struct
 */
 extern int package_info[2];
 
-// наименьшая толщина (минимальная сумма толщин) детали, сминаемой в одну сторону
-extern double package_thick_info[];
+// Наименьшая толщина (минимальная сумма толщин) детали, сминаемой в одну сторону
+extern double thick_part;
 
 // Открываем файл
 int open_file(WINDOW *name, FILE **fptr, char *name_file, int position);
@@ -82,9 +82,6 @@ void add_record_bolt(bolt info[], int number, double class, unsigned int r_bun, 
 
 // Вводим исходные данные
 void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b);
-
-// Удаляем ранее введенные символы
-void delete_char(WINDOW *w, int row, int column, int count_ch);
 
 // Блок болта
 void block_bolt(WINDOW *b, int number_slices);
@@ -120,7 +117,7 @@ double bolt_a_b(const bolt_area *info, int count);
 double bolt_a_bn(const bolt_area *info, int count);
 
 // Ввод толщин соединяемых деталей
-void enter_thick_info(WINDOW *a, int color_pair, int num_arr, char *arr, char ch,
+void enter_thick_info(WINDOW *a, int color_pair, char *arr, char ch,
                       const char *text_1, const char *text_2);
 
 // Ввод силы по оси X
