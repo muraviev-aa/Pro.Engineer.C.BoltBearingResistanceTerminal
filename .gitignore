@@ -54,3 +54,5 @@ dkms.conf
 /bolt_bearing_355/cmake-build-debug
 /bolt_bearing_255/cmake-build-debug
 /bolt_bearing_255/.idea
+/bolt_bearing_245/cmake-build-debug
+/bolt_bearing_245/.idea
