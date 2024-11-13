@@ -156,7 +156,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
         {
             wmove(a, 1, 4);
             wprintw(a, "Incorrect bolt diameter entered. Press any button");
-            wgetch(a);
+            ch = (char) wgetch(a);
         } else
         {
             wmove(a, 1, 4);
@@ -207,8 +207,7 @@ void data_entry_dialog(WINDOW *sub1, WINDOW *a, WINDOW *b)
                               "is correct then press 'y', if incorrect press any button ";
 
     /* Ввод толщины (суммарной толщины) сминаемой в одном направлении детали */
-    enter_thick_info(a, 5, info_thick_first_part, ch,
-                     thick_first_1, thick_first_2);
+    enter_thick_info(a, 5, info_thick_first_part, ch, thick_first_1, thick_first_2);
 
     // Вывод результата ввода толщины (суммарной толщины) элемента сминаемого в одном направлении
     wmove(sub1, 5, 3);
@@ -230,9 +229,17 @@ void enter_thick_info(WINDOW *a, int color_pair, char *arr, char ch,
         waddstr(a, text_1);
         wgetnstr(a, arr, 4);
         thick_part = atof(arr);
-        wmove(a, 1, 4);
-        wprintw(a, text_2, thick_part);
-        ch = (char) wgetch(a);
+        if (thick_part < 2 || thick_part > 20)
+        {
+            wmove(a, 1, 4);
+            wprintw(a, "An incorrect part thickness has been entered. Press any button");
+            ch = (char) wgetch(a);
+        } else
+        {
+            wmove(a, 1, 4);
+            wprintw(a, text_2, thick_part);
+            ch = (char) wgetch(a);
+        }
     } while (ch != 'y');
 }
 
